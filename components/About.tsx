@@ -28,7 +28,7 @@ export default function About() {
         </div>
       </div>
 
-      <div className="w-1/4 pr-20">
+      <div className="w-1/4 pr-20 mt-30">
         <div className="flex flex-col text-end items-end  gap-4">
           <h1 className="font-bold">Join the YNOTNOW Tribe</h1>
           <p>
