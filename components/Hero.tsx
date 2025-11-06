@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import Image from "next/image";
 
 export default function Hero() {
@@ -24,11 +25,35 @@ export default function Hero() {
       </div>
 
       {/* Centered text */}
-      <div className="relative flex flex-col items-center justify-center h-full text-center text-white z-10">
-        <h1 className="text-6xl md:text-7xl font-bold tracking-tight drop-shadow-lg">
+      <div className="relative flex flex-col  items-center justify-center h-full text-center text-black z-10">
+        <motion.h1
+          initial={{
+            opacity: 0.6,
+          }}
+          animate={{
+            opacity: 1,
+            transition: {
+              duration: 1,
+            },
+          }}
+          className="text-6xl md:text-7xl  tracking-tight drop-shadow-lg font-bakbak"
+        >
           WISH COME TRUE
-        </h1>
-        <p className="text-2xl md:text-4xl mt-4 drop-shadow-md">Coming Soon!</p>
+        </motion.h1>
+        <motion.p
+          initial={{
+            translateY: -10,
+          }}
+          animate={{
+            translateY: 10,
+            transition: {
+              duration: 1,
+            },
+          }}
+          className="text-lg text-white md:text-2xl lg:text-4xl drop-shadow-md"
+        >
+          Coming Soon!
+        </motion.p>
       </div>
 
       {/* Fragile tag image */}
