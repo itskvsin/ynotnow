@@ -6,9 +6,9 @@ import { motion } from "framer-motion";
 export default function Navbar() {
   return (
     <section>
-      <div className="border-b border-white flex items-center bg-black/60 justify-between fixed z-50 w-screen px-30">
+      <div className="border-b border-white flex items-center bg-black/60 justify-between fixed z-50 w-screen px-10 lg:px-30">
         <div>
-          <h1 className="font-bold text-3xl text-white font-bakbak">YNOTNOW</h1>
+          <h1 className="font-bold text-xl lg:text-3xl text-white font-bakbak">YNOTNOW</h1>
         </div>
 
         <motion.div
@@ -24,6 +24,7 @@ export default function Navbar() {
             width={100}
             height={100}
             alt="image"
+            className="w-20 lg:w-30"
           />
         </motion.div>
 
