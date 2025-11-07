@@ -13,14 +13,14 @@ export default function Hero() {
   return (
     <section className="relative h-[130vh] w-full overflow-visible">
       {/* Background image */}
-      <div className="absolute inset-0 -z-10 overflow-x-hidden">
+      <div className="overflow-x-hidden">
         <Image
           src="/images/heroBgImage.png"
           alt="Background image"
           fill
           priority
           // quality={100}
-          className={`object-cover transition-opacity duration-1000`}
+          className="object-contain lg:object-cover  transition-opacity duration-1000"
         />
       </div>
 
@@ -29,11 +29,13 @@ export default function Hero() {
         <motion.h1
           initial={{
             opacity: 0.6,
+            translateY: 20,
           }}
           animate={{
             opacity: 1,
+            translateY:0,
             transition: {
-              duration: 1,
+              duration: 0.8,
             },
           }}
           className="text-6xl md:text-7xl  tracking-tight drop-shadow-lg font-bakbak"
@@ -42,15 +44,17 @@ export default function Hero() {
         </motion.h1>
         <motion.p
           initial={{
-            translateY: -10,
+            translateY: -20,
+            opacity:0,
           }}
           animate={{
-            translateY: 10,
+            translateY: 8,
+            opacity: 1,
             transition: {
-              duration: 1,
+              duration: 0.4,
             },
           }}
-          className="text-lg text-white md:text-2xl lg:text-4xl drop-shadow-md"
+          className="text-lg text-white md:text-3xl lg:text-4xl drop-shadow-md"
         >
           Coming Soon!
         </motion.p>
