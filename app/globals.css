@@ -10,6 +10,18 @@
   font-family: 'Bakbak One', sans-serif;
 }
 
+@font-face {
+  font-family: 'Big Shoulders';
+  src: url('/fonts/BigShoulders-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: 100 900; /* supports variable weights */
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-bigshoulders {
+  font-family: 'Big Shoulders', sans-serif;
+}
+
 /* :root {
   --background: #ffffff;
   --foreground: #171717;

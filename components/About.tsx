@@ -5,14 +5,14 @@ export default function About() {
   return (
     <section className="lg:h-screen w-screen lg:flex lg:items-center lg:justify-between">
       <div className="flex flex-col-reverse lg:flex-col lg:justify-around lg:items-center lg:h-full lg:w-2/4">
-        <div className="flex gap-4 flex-col p-4 lg:w-2/4">
-          <h1 className="font-bold text-xl">About</h1>
-          <p>A question. A mindset. A movement. </p>{" "}
-          <p>
+        <div className="flex gap-4 flex-col justify-center md:items-center lg:items-start p-4 lg:w-2/4">
+          <h1 className="font-bold text-xl ">About</h1>
+          <p className="text-left">A question. A mindset. A movement. </p>{" "}
+          <p className="text-left md:text-center lg:text-left">
             YNOTNOW was born from the idea that there’s never a perfect time but
             only now
           </p>
-          <p>
+          <p className="text-left md:text-center lg:text-left">
             With bold silhouettes and confident design, we craft apparel for
             those who act before they’re ready. Unapologetically present.
           </p>
@@ -28,23 +28,23 @@ export default function About() {
         </div>
       </div>
 
-      <div className="lg:w-1/4 lg:pr-20 lg:mt-30">
-        <div className="flex flex-col lg:text-end lg:items-end p-4  gap-4">
+      <div className="lg:w-4/10 lg:pr-20 lg:mt-30">
+        <div className="flex flex-col text-start items-start md:items-center md:text-end lg:items-end p-4  gap-4">
           <h1 className="font-bold">Join the YNOTNOW Tribe</h1>
           <p>
             Stay in the loop.Email us for updates and get notified the minute
             our first drop goes live.
           </p>
-          <form className="flex flex-row-reverse md:flex">
+          <form className="flex md:flex flex-row-reverse md:flex-row">
             <input
               type="email"
               placeholder="Enter your email"
-              className="lg:flex border placeholder-black text-lg border-black px-3 py-2 lg:px-6 lg:py-3  focus:ring-1 focus:ring-black"
+              className="lg:flex border placeholder-black w-auto text-lg border-black md:px-3 md:py-2 lg:px-6 lg:py-3  focus:ring-1 focus:ring-black"
               aria-label="Enter your email"
             />
             <button
               type="submit"
-              className="px-5 py-2 bg-black text-white text-sm  hover:bg-gray-800 transition-colors"
+              className="px-3 py-2 lg:px-5 lg:py-3 bg-black text-white text-sm  hover:bg-gray-800 transition-colors"
             >
               Subscribe
             </button>

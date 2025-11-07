@@ -13,19 +13,19 @@ export default function Hero() {
   return (
     <section className="relative h-[130vh] w-full overflow-visible">
       {/* Background image */}
-      <div className="overflow-x-hidden">
+      <div className="overflow-x-hidden ">
         <Image
           src="/images/heroBgImage.png"
           alt="Background image"
           fill
           priority
           // quality={100}
-          className="object-contain lg:object-cover  transition-opacity duration-1000"
+          className="object-cover lg:object-cover   transition-opacity duration-1000"
         />
       </div>
-
+{/* border-4 border-red-700 */}
       {/* Centered text */}
-      <div className="relative flex flex-col  items-center justify-center h-full text-center text-black z-10">
+      <div className="relative flex flex-col gap-4 items-center justify-center h-full text-center text-black z-10">
         <motion.h1
           initial={{
             opacity: 0.6,
@@ -44,7 +44,7 @@ export default function Hero() {
         </motion.h1>
         <motion.p
           initial={{
-            translateY: -20,
+            translateY: -30,
             opacity:0,
           }}
           animate={{
@@ -54,7 +54,7 @@ export default function Hero() {
               duration: 0.4,
             },
           }}
-          className="text-lg text-white md:text-3xl lg:text-4xl drop-shadow-md"
+          className="text-lg text-white md:text-3xl font-bigshoulders lg:text-5xl drop-shadow-md"
         >
           Coming Soon!
         </motion.p>
