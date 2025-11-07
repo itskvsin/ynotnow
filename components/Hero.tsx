@@ -20,12 +20,20 @@ export default function Hero() {
           fill
           priority
           // quality={100}
-          className="object-cover lg:object-cover   transition-opacity duration-1000"
+          className="object-cover lg:object-cover hidden md:flex lg:flex  transition-opacity duration-1000"
+        />
+        <Image
+          src="/images/bg-mobile.png"
+          alt="Background image"
+          fill
+          priority
+          // quality={100}
+          className="object-auto flex md:hidden lg:hidden transition-opacity duration-1000"
         />
       </div>
-{/* border-4 border-red-700 */}
+      {/* border-4 border-red-700 */}
       {/* Centered text */}
-      <div className="relative flex flex-col gap-4 items-center justify-center h-full text-center text-black z-10">
+      <div className="relative flex flex-col gap-2 items-center justify-center h-full text-center text-black z-10">
         <motion.h1
           initial={{
             opacity: 0.6,
@@ -33,35 +41,35 @@ export default function Hero() {
           }}
           animate={{
             opacity: 1,
-            translateY:0,
+            translateY: -10,
             transition: {
-              duration: 0.8,
+              duration: 1.2,
             },
           }}
-          className="text-6xl md:text-7xl  tracking-tight drop-shadow-lg font-bakbak"
+          className="text-4xl md:text-7xl  tracking-tight drop-shadow-lg font-bakbak"
         >
           WISH COME TRUE
         </motion.h1>
         <motion.p
           initial={{
-            translateY: -30,
-            opacity:0,
+            translateY: -10,
+            opacity: 0,
           }}
           animate={{
             translateY: 8,
             opacity: 1,
             transition: {
-              duration: 0.4,
+              duration: 0.8,
             },
           }}
-          className="text-lg text-white md:text-3xl font-bigshoulders lg:text-5xl drop-shadow-md"
+          className="text-3xl text-white md:text-3xl font-bigshoulders lg:text-5xl drop-shadow-md"
         >
           Coming Soon!
         </motion.p>
       </div>
 
       {/* Fragile tag image */}
-      <div className="absolute -bottom-6 right-16 z-100 pointer-events-none">
+      <div className="absolute -bottom-6 right-16 z-10 pointer-events-none">
         <Image
           src="/images/fragileTag.png"
           width={160}

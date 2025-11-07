@@ -8,7 +8,12 @@ export default function Navbar() {
     <section>
       <div className="border-b border-white flex items-center bg-black/60 justify-between fixed z-50 w-screen px-8 lg:px-30">
         <div>
-          <h1 className="font-bold text-xl lg:text-3xl text-white font-bakbak w-1/4 lg:w-2/4">YNOTNOW</h1>
+          <h1 className="font-bold text-xl lg:text-3xl text-white font-bakbak w-1/4 lg:w-2/4 flex gap-1">
+            <span>Y</span>
+            <span className="flex gap-1">
+              NOT <span>NOW</span>
+            </span>
+          </h1>
         </div>
 
         <motion.div
