@@ -1,8 +1,7 @@
 @import "tailwindcss";
 @font-face {
   font-family: 'Bakbak One';
-  src: url('/fonts/BakbakOne-Regular.woff2') format('woff2'),
-       url('/fonts/BakbakOne-Regular.ttf') format('truetype');
+  src: url('/fonts/BakbakOne-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
