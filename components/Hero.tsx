@@ -11,7 +11,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative h-[130vh] w-full overflow-visible">
+    <section className="relative max-md:max-h-screen max-md:h-screen lg:h-[130vh] w-full overflow-visible">
       {/* Background image */}
       <div className="overflow-x-hidden ">
         <Image
