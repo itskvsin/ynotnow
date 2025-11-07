@@ -7,8 +7,8 @@ export default function LastBg(){
         <section>
             <Image 
             src={"/images/lastBg.png"}
-            width={1600}
-            height={1600}
+            width={1900}
+            height={1900}
             alt="YNOTNOW"
             />
         </section>

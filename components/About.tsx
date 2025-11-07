@@ -35,11 +35,11 @@ export default function About() {
             Stay in the loop.Email us for updates and get notified the minute
             our first drop goes live.
           </p>
-          <form className="flex">
+          <form className="flex flex-row-reverse md:flex">
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 border placeholder-black text-lg border-black px-6 py-3  focus:ring-1 focus:ring-black"
+              className="lg:flex border placeholder-black text-lg border-black px-3 py-2 lg:px-6 lg:py-3  focus:ring-1 focus:ring-black"
               aria-label="Enter your email"
             />
             <button
@@ -50,9 +50,9 @@ export default function About() {
             </button>
           </form>
         </div>
-        <div className="flex items-center lg:justify-end px-4 gap-4 my-4">
+        <div className="flex-row justify-start flex lg:flex items-center lg:justify-end px-4 gap-4 my-4 ">
           <p className="font-bold">Follow Us</p>
-          <RiInstagramFill className="text-5xl  border-gray-400 border rounded-full p-2" />
+          <RiInstagramFill className="text-3xl lg:text-5xl border-gray-400 border rounded-full p-1 lg:p-2" />
         </div>
       </div>
     </section>

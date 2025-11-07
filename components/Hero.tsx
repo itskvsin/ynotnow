@@ -19,7 +19,7 @@ export default function Hero() {
           alt="Background image"
           fill
           priority
-          quality={100}
+          // quality={100}
           className={`object-cover transition-opacity duration-1000`}
         />
       </div>
