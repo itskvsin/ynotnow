@@ -62,9 +62,9 @@ export default function Hero() {
               duration: 0.8,
             },
           }}
-          className="text-3xl text-white md:text-3xl font-bigshoulders lg:text-5xl drop-shadow-md"
+          className="text-3xl text-white md:text-3xl font-bigshoulders lg:text-5xl capitalize drop-shadow-md"
         >
-          Coming Soon!
+          launching soon!
         </motion.p>
       </div>
 

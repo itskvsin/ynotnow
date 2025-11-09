@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { RiInstagramFill } from "react-icons/ri";
+import Link from "next/link";
+import { RiInstagramFill, RiYoutubeFill, RiMailFill } from "react-icons/ri";
 
 export default function About() {
   return (
@@ -9,7 +10,7 @@ export default function About() {
           <h1 className="font-bold text-xl ">About</h1>
           <p className="text-left text-[#00000080]">A question. A mindset. A movement. </p>{" "}
           <p className="text-left md:text-center lg:text-left text-[#00000080]">
-            YNOTNOW was born from the idea that there’s never a perfect time but
+            YNOTNOW was born. From the idea that there’s never a perfect time but
             only now
           </p>
           <p className="text-left md:text-center lg:text-left text-[#00000080]">
@@ -52,7 +53,9 @@ export default function About() {
         </div>
         <div className="flex-row justify-start flex lg:flex items-center lg:justify-end px-4 gap-4 mb-6 ">
           <p className="font-bold">Follow Us</p>
-          <RiInstagramFill className="text-3xl lg:text-5xl border-gray-400 border rounded-full p-1 lg:p-2" />
+          <Link href="https://www.instagram.com/ynotnow.in?igsh=MWcyamF6MnBpcGFkZw=="><RiInstagramFill className="text-3xl lg:text-5xl border-gray-400 border rounded-full p-1 lg:p-2 hover:scale-110 transition-all ease-in-out duration-300" /></Link>
+          <Link href="https://youtube.com/@ynotnowclothing?si=VVW_vjozmYHB99Vc"><RiYoutubeFill className="text-3xl lg:text-5xl border-gray-400 border rounded-full p-1 lg:p-2 hover:scale-110 transition-all ease-in-out duration-300" /></Link>
+          <Link href="mailto:info@ynotnow.in"><RiMailFill className="text-3xl lg:text-5xl border-gray-400 border rounded-full p-1 lg:p-2 hover:scale-110 transition-all ease-in-out duration-300" /></Link>
         </div>
       </div>
     </section>
