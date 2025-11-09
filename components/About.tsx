@@ -10,8 +10,8 @@ export default function About() {
           <h1 className="font-bold text-xl ">About</h1>
           <p className="text-left text-[#00000080]">A question. A mindset. A movement. </p>{" "}
           <p className="text-left md:text-center lg:text-left text-[#00000080]">
-            YNOTNOW was born. From the idea that there’s never a perfect time but
-            only now
+            YNOTNOW was born from the idea that there’s never a perfect time but
+            only now.
           </p>
           <p className="text-left md:text-center lg:text-left text-[#00000080]">
             With bold silhouettes and confident design, we craft apparel for
