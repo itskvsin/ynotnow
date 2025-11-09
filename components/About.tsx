@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { RiInstagramFill, RiYoutubeFill, RiMailFill } from "react-icons/ri";
+import { RiInstagramFill, RiYoutubeFill, RiMailFill, RiFacebookBoxFill } from "react-icons/ri";
 
 export default function About() {
   return (
@@ -45,7 +45,7 @@ export default function About() {
             />
             <button
               type="submit"
-              className="px-4 py-2 lg:px-5 lg:py-3 bg-black text-white text-sm  hover:bg-gray-800 transition-colors"
+              className="px-4 py-2 lg:px-5 lg:py-3 bg-black text-white text-sm  hover:bg-black/90 transition-colors"
             >
               Subscribe
             </button>
@@ -56,6 +56,7 @@ export default function About() {
           <Link href="https://www.instagram.com/ynotnow.in?igsh=MWcyamF6MnBpcGFkZw=="><RiInstagramFill className="text-3xl lg:text-5xl border-gray-400 border rounded-full p-1 lg:p-2 hover:scale-110 transition-all ease-in-out duration-300" /></Link>
           <Link href="https://youtube.com/@ynotnowclothing?si=VVW_vjozmYHB99Vc"><RiYoutubeFill className="text-3xl lg:text-5xl border-gray-400 border rounded-full p-1 lg:p-2 hover:scale-110 transition-all ease-in-out duration-300" /></Link>
           <Link href="mailto:info@ynotnow.in"><RiMailFill className="text-3xl lg:text-5xl border-gray-400 border rounded-full p-1 lg:p-2 hover:scale-110 transition-all ease-in-out duration-300" /></Link>
+          <Link href="https://www.facebook.com/ynotnow.in"><RiFacebookBoxFill className="text-3xl lg:text-5xl border-gray-400 border rounded-full p-1 lg:p-2 hover:scale-110 transition-all ease-in-out duration-300" /></Link>
         </div>
       </div>
     </section>
