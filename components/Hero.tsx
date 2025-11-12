@@ -15,7 +15,7 @@ export default function Hero() {
       {/* Background image */}
       <div className="overflow-x-hidden ">
         <Image
-          src="/images/heroBgImage.png"
+          src="/images/changeImg.png"
           alt="Background image"
           fill
           priority
@@ -23,7 +23,7 @@ export default function Hero() {
           className="object-cover lg:object-cover hidden md:flex lg:flex  transition-opacity duration-1000"
         />
         <Image
-          src="/images/bg-mobile.png"
+          src="/images/mobileImgChange.png"
           alt="Background image"
           fill
           priority
