@@ -24,11 +24,13 @@ export default function Navbar() {
         </div>
 
         <motion.div
-          animate={{
-            rotate: 360,
-            transition: {
-              duration: 1,
-            },
+          initial={{ rotate: 0 }}
+          animate={{ rotate: 360 }}
+          transition={{
+            duration: 1,
+            repeat: Infinity,
+            repeatType: "loop",
+            repeatDelay: 2.5,
           }}
         >
           <Image

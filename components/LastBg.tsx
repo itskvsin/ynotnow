@@ -10,6 +10,7 @@ export default function LastBg(){
             width={1900}
             height={1900}
             alt="YNOTNOW"
+            className="w-full"
             />
         </section>
     )

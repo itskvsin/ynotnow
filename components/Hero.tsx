@@ -11,72 +11,55 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative max-md:max-h-screen max-md:h-screen lg:h-[130vh] w-full overflow-visible">
+    <section className="relative h-screen md:h-screen lg:h-[130vh] w-full overflow-hidden flex items-center justify-center">
       {/* Background image */}
-      <div className="overflow-x-hidden ">
+      <div className="absolute inset-0 w-full h-screen">
+        {/* Desktop / Tablet */}
         <Image
-          src="/images/changeImg.png"
+          src="/images/desktopBgImage1.png"
           alt="Background image"
           fill
           priority
-          // quality={100}
-          className="object-cover lg:object-cover hidden md:flex lg:flex  transition-opacity duration-1000"
+          quality={100}
+          className="hidden md:block object-cover transition-opacity duration-1000"
         />
+
+        {/* Mobile */}
         <Image
-          src="/images/changeImgMobile.png"
+          src="/images/mobileBgImage.png"
           alt="Background image"
           fill
           priority
-          // quality={100}
-          className="object-auto flex md:hidden lg:hidden transition-opacity duration-1000"
+          quality={100}
+          className="block md:hidden min-h-screen object-cover transition-opacity duration-1000"
         />
       </div>
-      {/* border-4 border-red-700 */}
-      {/* Centered text */}
-      <div className="relative flex flex-col gap-2 items-center justify-center h-full text-center text-black z-10">
+
+      {/* Center Text */}
+      <div className="relative z-10 flex flex-col gap-3 items-center justify-center px-4 text-center">
         <motion.h1
-          initial={{
-            opacity: 0.6,
-            translateY: 20,
-          }}
+          initial={{ opacity: 0.6, translateY: 20 }}
           animate={{
             opacity: 1,
             translateY: -10,
-            transition: {
-              duration: 1.2,
-            },
+            transition: { duration: 1.2 },
           }}
-          className="text-4xl md:text-7xl  tracking-tight drop-shadow-lg font-bakbak"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bakbak tracking-tight drop-shadow-lg text-black"
         >
           WISH COME TRUE
         </motion.h1>
+
         <motion.p
-          initial={{
-            translateY: -10,
-            opacity: 0,
-          }}
+          initial={{ opacity: 0, translateY: -10 }}
           animate={{
-            translateY: 8,
             opacity: 1,
-            transition: {
-              duration: 0.8,
-            },
+            translateY: 8,
+            transition: { duration: 0.8 },
           }}
-          className="text-3xl text-white md:text-3xl font-bigshoulders lg:text-5xl capitalize drop-shadow-md"
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bigshoulders capitalize drop-shadow-md text-white"
         >
           launching soon!
         </motion.p>
-      </div>
-
-      {/* Fragile tag image */}
-      <div className="absolute -bottom-6 right-16 z-10 pointer-events-none">
-        <Image
-          src="/images/fragileTag.png"
-          width={160}
-          height={160}
-          alt="Fragile tag"
-          className="object-contain"
-        />
       </div>
     </section>
   );

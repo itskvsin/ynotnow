@@ -51,7 +51,7 @@ export default function About() {
             </button>
           </form>
         </div>
-        <div className="flex-row justify-start flex lg:flex items-center lg:justify-end px-4 gap-4 mb-6 ">
+        <div className="flex-row justify-start sm:justify-center flex lg:flex items-center lg:justify-end px-4 gap-4 mb-6 ">
           <p className="font-bold">Follow Us</p>
           <Link href="https://www.instagram.com/ynotnow.in?igsh=MWcyamF6MnBpcGFkZw=="><RiInstagramFill className="text-3xl lg:text-5xl border-gray-400 border rounded-full p-1 lg:p-2 hover:scale-110 transition-all ease-in-out duration-300" /></Link>
           <Link href="https://youtube.com/@ynotnowclothing?si=VVW_vjozmYHB99Vc"><RiYoutubeFill className="text-3xl lg:text-5xl border-gray-400 border rounded-full p-1 lg:p-2 hover:scale-110 transition-all ease-in-out duration-300" /></Link>
