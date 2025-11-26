@@ -6,13 +6,13 @@ import Hero from "@/components/Hero";
 import LastBg from "@/components/LastBg";
 import Navbar from "@/components/Navbar";
 import Moment from "@/components/Moment";
-import Marquee from "@/components/Marquee";
 import ProductShowcase from "@/components/ProductShowcase";
+import { ReactLenis, useLenis } from "lenis/react";
 
 export default function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
-  const correctPassword = "admin"; // change this to your password
+  const correctPassword = "admin";
   const storageKey = "pageAuth";
 
   useEffect(() => {
@@ -60,16 +60,17 @@ export default function Home() {
     );
   }
 
+  // const lenis = useLenis((lenis) => {});
+
   return (
-    <div>
+    <ReactLenis root options={{ lerp: 0.1, smoothWheel: true, wheelMultiplier: 1.2 }}>
       <Navbar />
       <Hero />
       <ProductShowcase />
-      <Marquee />
       <Moment />
       <About />
       <LastBg />
       <Footer />
-    </div>
+    </ReactLenis>
   );
 }

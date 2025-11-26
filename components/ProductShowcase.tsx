@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import Marquee from "@/components/Marquee";
 import { useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const products = [
   {
@@ -36,9 +38,12 @@ const products = [
 ];
 
 export default function ProductShowcase() {
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 500], [0, -80]); // Parallax scroll depth
+
   return (
-    <section className="w-full bg-white">
-      <div className="max-w-8xl mx-auto px-6 my-20">
+    <section className="w-full pt-20 bg-white">
+      <motion.div style={{ y }} className="max-w-8xl mx-auto px-6 my-20">
 
         {/* PRODUCTS GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 text-center px-20">
@@ -59,7 +64,9 @@ export default function ProductShowcase() {
             </button>
           </Link>
         </div>
-      </div>
+      </motion.div>
+
+      <Marquee />
     </section>
   );
 }
@@ -74,26 +81,25 @@ function ProductCard({ product }: any) {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-<div className="relative w-full aspect-[3/4] overflow-hidden">
-  <Image
-    src={product.image}
-    alt={product.name}
-    fill
-    className={`object-cover transition-opacity duration-300 ${
-      hover ? "opacity-0" : "opacity-100"
-    }`}
-  />
+      <div className="relative w-full aspect-[3/4] overflow-hidden">
+        <Image
+          src={product.image}
+          alt={product.name}
+          fill
+          className={`object-cover transition-opacity duration-300 ${
+            hover ? "opacity-0" : "opacity-100"
+          }`}
+        />
 
-  <Image
-    src={product.hoverImage}
-    alt={product.name}
-    fill
-    className={`absolute top-0 left-0 object-contain transition-opacity duration-300 ${
-      hover ? "opacity-100" : "opacity-0"
-    }`}
-  />
-</div>
-
+        <Image
+          src={product.hoverImage}
+          alt={product.name}
+          fill
+          className={`absolute top-0 left-0 object-contain transition-opacity duration-300 ${
+            hover ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      </div>
 
       <p className="mt-4 font-medium text-black text-lg">{product.name}</p>
       <p className="text-black text-base mt-1">{product.price}</p>
