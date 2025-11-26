@@ -5,6 +5,9 @@ import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import LastBg from "@/components/LastBg";
 import Navbar from "@/components/Navbar";
+import Moment from "@/components/Moment";
+import Marquee from "@/components/Marquee";
+import ProductShowcase from "@/components/ProductShowcase";
 
 export default function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -61,6 +64,9 @@ export default function Home() {
     <div>
       <Navbar />
       <Hero />
+      <ProductShowcase />
+      <Marquee />
+      <Moment />
       <About />
       <LastBg />
       <Footer />

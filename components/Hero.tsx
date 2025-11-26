@@ -11,7 +11,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative h-screen md:h-screen lg:h-[130vh] w-full overflow-hidden flex items-center justify-center">
+    <section className="relative min-h-screen  w-full overflow-hidden flex items-center justify-center">
       {/* Background image */}
       <div className="absolute inset-0 w-full h-screen">
         {/* Desktop / Tablet */}
