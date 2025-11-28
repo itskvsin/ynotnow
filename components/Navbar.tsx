@@ -12,12 +12,19 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav
+    <motion.nav
       onMouseLeave={() => setOpen(false)}
-      className="fixed top-0 left-0 w-full z-50 bg-black/60 border-b border-white px-8 lg:px-24 py-4 flex items-center justify-between"
+      className="fixed top-0 left-0 w-full z-50 bg-black/60 border-b border-white px-8 lg:px-24 py-2 flex items-center justify-between"
     >
       {/* LOGO LEFT */}
-      <div className="shrink-0">
+      <motion.div
+        initial={{ y: 20 }}
+        animate={{ y: 0 }}
+        transition={{
+          duration: 1,
+        }}
+        className="shrink-0"
+      >
         <Image
           src={"/images/ynotnowLogo.png"}
           width={100}
@@ -25,7 +32,7 @@ export default function Navbar() {
           alt="logo"
           className="w-28 lg:w-40"
         />
-      </div>
+      </motion.div>
 
       {/* ROTATING LOGO CENTER */}
       <motion.div
@@ -81,6 +88,6 @@ export default function Navbar() {
           </div>
         </motion.div>
       </div>
-    </nav>
+    </motion.nav>
   );
 }

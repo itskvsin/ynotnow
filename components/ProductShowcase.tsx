@@ -81,7 +81,7 @@ function ProductCard({ product }: any) {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      <div className="relative w-full aspect-[3/4] overflow-hidden">
+      <div className="relative w-full aspect-3/4 overflow-hidden">
         <Image
           src={product.image}
           alt={product.name}

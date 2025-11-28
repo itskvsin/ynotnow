@@ -5,9 +5,8 @@ import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import LastBg from "@/components/LastBg";
 import Navbar from "@/components/Navbar";
-import Moment from "@/components/Moment";
-import ProductShowcase from "@/components/ProductShowcase";
 import { ReactLenis, useLenis } from "lenis/react";
+import Reveal from "@/components/effects/Reveal";
 
 export default function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -60,17 +59,15 @@ export default function Home() {
     );
   }
 
-  // const lenis = useLenis((lenis) => {});
-
   return (
     <ReactLenis root options={{ lerp: 0.1, smoothWheel: true, wheelMultiplier: 1.2 }}>
-      <Navbar />
-      <Hero />
-      <ProductShowcase />
-      <Moment />
-      <About />
-      <LastBg />
-      <Footer />
+      <Reveal>
+        <Navbar />
+        <Hero />
+        <About />
+        <LastBg />
+        <Footer />
+      </Reveal>
     </ReactLenis>
   );
 }
