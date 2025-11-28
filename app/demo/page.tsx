@@ -3,6 +3,7 @@
 import Reveal from "@/components/effects/Reveal";
 import Moment from "@/components/Moment";
 import ProductShowcase from "@/components/ProductShowcase";
+import { Slider } from "@/components/Slider";
 import ReactLenis from "lenis/react";
 
 export default function Demo() {
@@ -14,6 +15,7 @@ export default function Demo() {
       <Reveal>
         <ProductShowcase />
         <Moment />
+        <Slider />
       </Reveal>
     </ReactLenis>
   );
