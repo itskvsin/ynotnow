@@ -8,7 +8,7 @@ import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import LastBg from "@/components/LastBg";
 import Navbar from "@/components/Navbar";
-import { Slider } from "@/components/Slider";
+import Slider  from "@/components/Slider";
 import ReactLenis from "lenis/react";
 import FeaturesGrid from "@/components/FeaturesGrid";
 

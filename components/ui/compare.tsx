@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { SparklesCore } from "@/components/ui/sparkles";
+// import { SparklesCore } from "@/components/ui/sparkles";
 import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { IconDotsVertical } from "@tabler/icons-react";
@@ -106,7 +106,7 @@ export const Compare = ({
         const x = clientX - rect.left;
         const percent = (x / rect.width) * 100;
         requestAnimationFrame(() => {
-          setSliderXPercent(Math.max(0, Math.min(100, percent)));
+          setSliderXPercent(Math.max(-5, Math.min(105, percent)));
         });
       }
     },
@@ -151,7 +151,7 @@ return (
   <div
     ref={sliderRef}
     className={cn(
-      "relative w-full h-[90vh] overflow-hidden rounded-none",
+      "relative w-[90vw] h-[90vh] overflow-hidden rounded-none",
       className
     )}
     style={{
@@ -201,7 +201,7 @@ return (
       <img
         src={firstImage}
         alt="first image"
-        className="absolute inset-0 w-full h-full object-cover select-none"
+        className="absolute inset-0 w-screen h-full object-cover select-none"
         draggable={false}
       />
     </motion.div>
@@ -211,7 +211,7 @@ return (
       src={secondImage}
       alt="second image"
       className={cn(
-        "absolute inset-0 w-full h-full object-contain z-10 select-none",
+        "absolute inset-0 w-screen h-full object-cover z-10 select-none",
         secondImageClassname
       )}
       draggable={false}
@@ -220,5 +220,3 @@ return (
 );
 
 };
-
-const MemoizedSparklesCore = React.memo(SparklesCore);
