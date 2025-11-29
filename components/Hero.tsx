@@ -29,7 +29,7 @@ export default function Hero() {
           alt="Background image"
           fill
           priority
-          quality={100}
+          quality={70}
           className="hidden md:block object-cover transition-opacity duration-1000"
         />
 
@@ -39,7 +39,7 @@ export default function Hero() {
           alt="Background image"
           fill
           priority
-          quality={100}
+          quality={70}
           className="block md:hidden min-h-screen object-cover transition-opacity duration-1000"
         />
       </motion.div>
