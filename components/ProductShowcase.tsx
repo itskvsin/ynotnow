@@ -44,9 +44,8 @@ export default function ProductShowcase() {
   return (
     <section className="w-full pt-20 bg-white">
       <motion.div style={{ y }} className="max-w-8xl mx-auto px-6 my-20">
-
         {/* PRODUCTS GRID */}
-        <div className="sm:grid overflow-x-auto flex items-center sm:grid-cols-2 lg:grid-cols-4 gap-10 text-center px-6 sm:px-20">
+        <div className="flex sm:grid overflow-x-auto snap-x snap-mandatory sm:grid-cols-2 lg:grid-cols-4 gap-10 text-center px-6 sm:px-20 scroll-smooth">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
@@ -77,16 +76,16 @@ function ProductCard({ product }: any) {
 
   return (
     <div
-      className="flex flex-col h-[64vh] items-center cursor-pointer"
+      className="flex flex-col snap-center min-w-[80%] sm:min-w-0 h-[64vh] items-center cursor-pointer"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      <div className="relative w-full h-full aspect-3/4 overflow-hidden">
+      <div className="relative w-full h-full overflow-hidden">
         <Image
           src={product.image}
           alt={product.name}
           fill
-          className={`object-cover w-full h-full transition-opacity duration-300 ${
+          className={`object-cover transition-opacity duration-300 ${
             hover ? "opacity-0" : "opacity-100"
           }`}
         />
@@ -95,7 +94,7 @@ function ProductCard({ product }: any) {
           src={product.hoverImage}
           alt={product.name}
           fill
-          className={`absolute top-0 left-0 object-cover w-full h-full transition-opacity duration-300 ${
+          className={`absolute top-0 left-0 object-cover transition-opacity duration-300 ${
             hover ? "opacity-100" : "opacity-0"
           }`}
         />

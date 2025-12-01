@@ -5,24 +5,31 @@ import { motion } from "framer-motion";
 import { RiGeminiFill } from "react-icons/ri";
 import { MdOutlineShoppingBag } from "react-icons/md";
 import { FiMenu } from "react-icons/fi";
-import { useState } from "react";
+import { IoClose } from "react-icons/io5";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsDesktop(window.innerWidth > 1024);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   return (
     <motion.nav
-      onMouseLeave={() => setOpen(false)}
+      onMouseLeave={() => isDesktop && setOpen(false)}
       className="fixed top-0 left-0 w-full z-50 bg-black/60 border-b border-white px-8 lg:px-24 py-2 flex items-center justify-between"
     >
       {/* LOGO LEFT */}
       <motion.div
         initial={{ y: 20 }}
         animate={{ y: 0 }}
-        transition={{
-          duration: 1,
-        }}
+        transition={{ duration: 1 }}
         className="shrink-0"
       >
         <Image
@@ -59,29 +66,36 @@ export default function Navbar() {
         <RiGeminiFill className="text-white text-3xl" />
         <MdOutlineShoppingBag className="text-white text-4xl" />
 
-        {/* Hamburger Icon */}
-        <FiMenu
-          className="text-white text-3xl cursor-pointer"
-          onMouseEnter={() => setOpen(true)}
-        />
+        {/* MENU ICON */}
+        <div
+          onMouseEnter={() => isDesktop && setOpen(true)}
+          onClick={() => !isDesktop && setOpen(!open)}
+          className="cursor-pointer"
+        >
+          {open ? (
+            <IoClose className="text-white text-3xl transition-all duration-300" />
+          ) : (
+            <FiMenu className="text-white text-3xl transition-all duration-300" />
+          )}
+        </div>
 
         {/* MENU DROPDOWN */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
-          animate={open ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
+          animate={open ? { opacity: 1, y: -10 } : { opacity: 0, y: -10 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="absolute -right-25 top-20 pointer-events-none"
         >
-          <div className="pointer-events-auto bg-white text-black px-18 py-16 space-y-6 space-x-25">
-            <p className="text-2xl uppercase cursor-pointer">shop all</p>
-            <p className="text-2xl uppercase cursor-pointer">hoodies</p>
-            <p className="text-2xl uppercase cursor-pointer">t-shirt</p>
-            <p className="text-2xl uppercase cursor-pointer">accessories</p>
-            <p className="text-2xl uppercase cursor-pointer">about</p>
-            <p className="text-2xl uppercase cursor-pointer">account</p>
+          <div className="pointer-events-auto bg-white text-black px-16 py-14 space-y-4">
+            <p className="text-xl uppercase cursor-pointer">shop all</p>
+            <p className="text-xl uppercase cursor-pointer">hoodies</p>
+            <p className="text-xl uppercase cursor-pointer">t-shirt</p>
+            <p className="text-xl uppercase cursor-pointer">accessories</p>
+            <p className="text-xl uppercase cursor-pointer">about</p>
+            <p className="text-xl uppercase cursor-pointer">account</p>
 
             <Link href="#">
-              <button className="bg-black text-white text-xl px-12 py-3 mt-4">
+              <button className="bg-black text-white text-xl px-12 py-3 mt-4 w-full">
                 Login
               </button>
             </Link>
