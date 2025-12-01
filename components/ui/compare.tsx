@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { IconDotsVertical } from "@tabler/icons-react";
+import Image from "next/image";
 
 interface CompareProps {
   firstImage?: string;
@@ -198,18 +199,20 @@ return (
         clipPath: `inset(0 ${100 - sliderXPercent}% 0 0)`,
       }}
     >
-      <img
+      <Image
         src={firstImage}
         alt="first image"
         className="absolute inset-0 w-screen h-full object-cover select-none"
+        fill
         draggable={false}
       />
     </motion.div>
 
     {/* Second Image */}
-    <img
+    <Image
       src={secondImage}
       alt="second image"
+      fill
       className={cn(
         "absolute inset-0 w-screen h-full object-cover z-10 select-none",
         secondImageClassname

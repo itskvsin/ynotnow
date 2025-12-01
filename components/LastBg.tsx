@@ -2,9 +2,9 @@
 
 export default function LastBg() {
   return (
-    <section className="relative w-full h-[90vh] overflow-hidden">
+    <section className="relative w-full h-[28vh] lg:h-[90vh] overflow-hidden">
       <video
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover lg:object-cover"
         src="/videos/Firefly_Slow_subtle_animation_Mystery_vibe.webm"
         autoPlay
         loop

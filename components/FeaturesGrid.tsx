@@ -70,7 +70,7 @@ export default function FeaturesGrid() {
   return (
     <section className="w-full border-t border-b border-black bg-white">
         <MarqueeBar />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 text-center">
+      <div className="grid grid-cols-2 lg:grid-cols-4 text-center">
         
         <div className="py-10 border-r border-black flex flex-col items-center gap-3">
           <Globe size={32} />

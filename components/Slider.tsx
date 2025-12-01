@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 
 interface ImageCompareProps {
   beforeImage: string;
@@ -130,9 +131,10 @@ return (
       >
         {/* After Image */}
         <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-          <img
+          <Image
             src={afterImage}
             alt="After"
+            fill
             className="w-full h-full object-contain"
             draggable={false}
           />
@@ -143,9 +145,10 @@ return (
           className="absolute inset-0 overflow-hidden pointer-events-none flex items-center justify-center"
           style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
         >
-          <img
+          <Image
             src={beforeImage}
             alt="Before"
+            fill
             className="w-full h-full object-contain"
             draggable={false}
           />
