@@ -18,6 +18,7 @@ if (!shopifyDomain || !shopifyToken) {
   );
 }
 
+
 // Create Shopify Storefront API client
 export const shopifyClient = createStorefrontApiClient({
   storeDomain: shopifyDomain,
