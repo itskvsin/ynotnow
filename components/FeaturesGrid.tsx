@@ -6,36 +6,27 @@ import { Globe, Box, Headset, ArrowUpDown } from "lucide-react";
 const items = [
   "Enjoy Free Shipping on Orders Over ₹4999!",
   "10% with the code GET10",
-  "Don't wait. Wear now."
+  "Don't wait. Wear now.",
 ];
 
-      <div className="flex whitespace-nowrap ">
-        <motion.div
-          className="flex items-center gap-16"
+<div className="flex whitespace-nowrap ">
+  <motion.div className="flex items-center gap-16"></motion.div>
 
-        >
-          
-        </motion.div>
-
-        {/* DUPLICATE STRIP FOR SEAMLESS LOOP */}
-        <motion.div
-          className="flex items-center gap-16"
-
-        >
-        </motion.div>
-      </div>
+  {/* DUPLICATE STRIP FOR SEAMLESS LOOP */}
+  <motion.div className="flex items-center gap-16"></motion.div>
+</div>;
 
 export function MarqueeBar() {
   return (
     <div className="w-full bg-black flex gap-14 text-white py-2 overflow-hidden">
       <motion.div
         className="flex whitespace-nowrap text-sm gap-10"
-          animate={{ x: ["0%", "-100%"] }}
-          transition={{
-            duration: 20,
-            ease: "linear",
-            repeat: Infinity,
-          }}
+        animate={{ x: ["0%", "-100%"] }}
+        transition={{
+          duration: 20,
+          ease: "linear",
+          repeat: Infinity,
+        }}
       >
         {[...items, ...items].map((txt, i) => (
           <span key={i} className="flex items-center gap-4">
@@ -45,14 +36,14 @@ export function MarqueeBar() {
         ))}
       </motion.div>
 
-            <motion.div
+      <motion.div
         className="flex whitespace-nowrap text-sm gap-10"
-          animate={{ x: ["0%", "-100%"] }}
-          transition={{
-            duration: 20,
-            ease: "linear",
-            repeat: Infinity,
-          }}
+        animate={{ x: ["0%", "-100%"] }}
+        transition={{
+          duration: 20,
+          ease: "linear",
+          repeat: Infinity,
+        }}
       >
         {[...items, ...items].map((txt, i) => (
           <span key={i} className="flex items-center gap-4">
@@ -65,19 +56,16 @@ export function MarqueeBar() {
   );
 }
 
-
 export default function FeaturesGrid() {
   return (
     <section className="w-full border-t border-b border-black bg-white">
-        <MarqueeBar />
+      <MarqueeBar />
       <div className="grid grid-cols-2 lg:grid-cols-4 text-center">
-        
         <div className="py-10 border-r border-black flex flex-col items-center gap-3">
           <Globe size={32} />
           <h3 className="text-lg font-semibold">Free Global Shipping</h3>
           <p className="text-sm text-black/70">
-            Free Delivery On All Orders Over
-          <p className="text-sm text-black/70">₹4999.</p>
+            Free Delivery On All Orders Over ₹4999.
           </p>
         </div>
 
@@ -85,7 +73,7 @@ export default function FeaturesGrid() {
           <ArrowUpDown size={32} />
           <h3 className="text-lg font-semibold">Easy Returns</h3>
           <p className="text-sm text-black/70 w-3/4">
-            7-Day Easy Returns. Love It Or <p>Return It.</p>
+            7-Day Easy Returns. Love It Or Return It.
           </p>
         </div>
 
@@ -93,7 +81,7 @@ export default function FeaturesGrid() {
           <Box size={32} />
           <h3 className="text-lg font-semibold">Secure Packaging</h3>
           <p className="text-sm text-black/70 w-3/4">
-            Carefully Packed To Keep Your <p>Products Safe And Fresh.</p>
+            Carefully Packed To Keep Your Products Safe And Fresh.
           </p>
         </div>
 
@@ -101,10 +89,9 @@ export default function FeaturesGrid() {
           <Headset size={32} />
           <h3 className="text-lg font-semibold">Customer Support</h3>
           <p className="text-sm text-black/70 w-3/4">
-            Reach Us Anytime At. We're <p>Happy To Help.</p>
+            Reach Us Anytime At. We're Happy To Help.
           </p>
         </div>
-        
       </div>
     </section>
   );
