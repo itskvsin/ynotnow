@@ -84,7 +84,7 @@ export default function Navbar() {
           initial={{ opacity: 0, y: -20 }}
           animate={open ? { opacity: 1, y: -10 } : { opacity: 0, y: -10 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="absolute -right-25 top-20 pointer-events-none"
+          className={`${open ? "block" : "hidden"} absolute -right-25 top-20 pointer-events-none`}
         >
           <div className="pointer-events-auto bg-white text-black px-16 py-14 space-y-4">
             <Link href="/All-Products" className="text-xl uppercase cursor-pointer">shop all</Link>
