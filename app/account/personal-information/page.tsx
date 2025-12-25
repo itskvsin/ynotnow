@@ -2,8 +2,19 @@
 
 import BreadCrumbNav from "@/components/BreadCrumbNav";
 import tabs from "@/data/PersonalTabs";
-
 import React, { useState, useRef } from "react";
+
+function Profile() {
+  return <div>Personal information content</div>;
+}
+
+function Orders() {
+  return <div>Order history content</div>;
+}
+
+function Tracking() {
+  return <div>Order tracking content</div>;
+}
 
 const page = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -57,11 +68,17 @@ const page = () => {
       </div>
 
       {/* Custom scroll indicator (black line) */}
-      <div className="h-[2px] bg-gray-200 relative">
+      <div className="h-0.5 bg-gray-200 relative">
         <div
           className="h-full bg-black transition-all duration-150"
           style={{ width: `${scrollProgress}%` }}
         />
+      </div>
+
+      <div className="pt-6">
+        {activeTab === "profile" && <Profile />}
+        {activeTab === "orders" && <Orders />}
+        {activeTab === "tracking" && <Tracking />}
       </div>
     </section>
   );
