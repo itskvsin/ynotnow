@@ -58,7 +58,7 @@ export function MarqueeBar() {
 
 export default function FeaturesGrid() {
   return (
-    <section className="w-full bg-white mt-28 ">
+    <section className="w-full bg-white">
       <MarqueeBar />
       <div className="grid grid-cols-1 lg:grid-cols-4 text-center p-4 pt-10 gap-4">
         <div className="py-10 border border-black flex flex-col items-center gap-3">
