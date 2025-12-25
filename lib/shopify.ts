@@ -7,13 +7,13 @@ import type {
 
 // Get Shopify credentials from environment variables
 const shopifyDomain =
-  process.env.SHOPIFY_STORE_DOMAIN || "b39ac0a872fffe4e79fc40d888d7005a";
+  process.env.SHOPIFY_STORE_DOMAIN ;
 const shopifyToken =
-  process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN ||
-  "ynotnow-next-js.myshopify.com";
+  process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN 
+  ;
 const apiVersion = "2025-01";
 
-console.log("shopify domai : ", shopifyDomain, shopifyToken);
+console.log("shopify domain : ", shopifyDomain, shopifyToken);
 
 if (!shopifyDomain || !shopifyToken) {
   throw new Error(
