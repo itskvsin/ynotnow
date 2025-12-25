@@ -6,8 +6,11 @@ import type {
 } from "@/types/shopify";
 
 // Get Shopify credentials from environment variables
-const shopifyDomain = process.env.SHOPIFY_STORE_DOMAIN;
-const shopifyToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
+const shopifyDomain =
+  process.env.SHOPIFY_STORE_DOMAIN ;
+const shopifyToken =
+  process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN 
+  ;
 const apiVersion = "2025-01";
 
 console.log("shopify domain : ", shopifyDomain, shopifyToken);
@@ -17,7 +20,6 @@ if (!shopifyDomain || !shopifyToken) {
     "Missing Shopify environment variables. Please set SHOPIFY_STORE_DOMAIN and SHOPIFY_STOREFRONT_ACCESS_TOKEN"
   );
 }
-
 
 // Create Shopify Storefront API client
 export const shopifyClient = createStorefrontApiClient({
