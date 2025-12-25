@@ -193,7 +193,7 @@ function WishlistCard() {
 /* -------------------- MAIN PAGE -------------------- */
 
 const page = () => {
-  const [activeTab, setActiveTab] = useState("wishlist");
+  const [activeTab, setActiveTab] = useState("profile");
 
   const tabsRef = useRef<HTMLDivElement | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
