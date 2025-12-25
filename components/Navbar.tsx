@@ -57,14 +57,14 @@ export default function Navbar() {
           width={100}
           height={100}
           alt="logo"
-          className="w-16 lg:w-24"
+          className="w-16 lg:w-24 hidden md:flex"
         />
       </motion.div>
 
       {/* RIGHT ICONS + MENU */}
       <div className="flex items-center gap-4 lg:gap-6 relative">
-        <RiGeminiFill className="text-white text-3xl" />
-        <MdOutlineShoppingBag className="text-white text-4xl" />
+        <RiGeminiFill className="text-white text-3xl hidden md:flex" />
+        <MdOutlineShoppingBag className="text-white text-4xl hidden md:flex" />
 
         {/* MENU ICON */}
         <div
@@ -87,7 +87,7 @@ export default function Navbar() {
           className="absolute -right-25 top-20 pointer-events-none"
         >
           <div className="pointer-events-auto bg-white text-black px-16 py-14 space-y-4">
-            <p className="text-xl uppercase cursor-pointer">shop all</p>
+            <Link href="/All-Products" className="text-xl uppercase cursor-pointer">shop all</Link>
             <p className="text-xl uppercase cursor-pointer">hoodies</p>
             <p className="text-xl uppercase cursor-pointer">t-shirt</p>
             <p className="text-xl uppercase cursor-pointer">accessories</p>
