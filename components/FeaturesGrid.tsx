@@ -58,10 +58,10 @@ export function MarqueeBar() {
 
 export default function FeaturesGrid() {
   return (
-    <section className="w-full border-t border-b border-black bg-white">
+    <section className="w-full bg-white mt-28 ">
       <MarqueeBar />
-      <div className="grid grid-cols-2 lg:grid-cols-4 text-center">
-        <div className="py-10 border-r border-black flex flex-col items-center gap-3">
+      <div className="grid grid-cols-1 lg:grid-cols-4 text-center p-4 pt-10 gap-4">
+        <div className="py-10 border border-black flex flex-col items-center gap-3">
           <Globe size={32} />
           <h3 className="text-lg font-semibold">Free Global Shipping</h3>
           <p className="text-sm text-black/70">
@@ -69,7 +69,7 @@ export default function FeaturesGrid() {
           </p>
         </div>
 
-        <div className="py-10 border-r border-black flex flex-col items-center gap-3">
+        <div className="py-10 border border-black flex flex-col items-center gap-3">
           <ArrowUpDown size={32} />
           <h3 className="text-lg font-semibold">Easy Returns</h3>
           <p className="text-sm text-black/70 w-3/4">
@@ -77,7 +77,7 @@ export default function FeaturesGrid() {
           </p>
         </div>
 
-        <div className="py-10 border-r border-black flex flex-col items-center gap-3">
+        <div className="py-10 border border-black flex flex-col items-center gap-3">
           <Box size={32} />
           <h3 className="text-lg font-semibold">Secure Packaging</h3>
           <p className="text-sm text-black/70 w-3/4">
@@ -85,7 +85,7 @@ export default function FeaturesGrid() {
           </p>
         </div>
 
-        <div className="py-10 flex flex-col items-center gap-3">
+        <div className="py-10 border border-black flex flex-col items-center gap-3">
           <Headset size={32} />
           <h3 className="text-lg font-semibold">Customer Support</h3>
           <p className="text-sm text-black/70 w-3/4">

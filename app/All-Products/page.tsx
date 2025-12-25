@@ -6,6 +6,10 @@ import { RiFilter3Fill } from "react-icons/ri";
 import { BsFillGridFill } from "react-icons/bs";
 import { TfiLayoutGrid3Alt } from "react-icons/tfi";
 import ProductShowcase from "@/components/ProductShowcase";
+import FeaturesGrid from "@/components/FeaturesGrid";
+import About from "@/components/About";
+import LastBg from "@/components/LastBg";
+import Footer from "@/components/Footer";
 
 const Hero = () => {
   return (
@@ -32,6 +36,10 @@ const page = () => {
       <div className="-my-20">
         <ProductShowcase />
       </div>
+      <FeaturesGrid />
+      <About />
+      <LastBg />
+      <Footer />
     </section>
   );
 };
