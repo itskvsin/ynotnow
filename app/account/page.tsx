@@ -67,7 +67,6 @@ function Profile() {
   );
 }
 
-
 function Orders() {
   return (
     <div className="px-4 py-4 space-y-4 font-Geist">
@@ -81,7 +80,7 @@ function Orders() {
 function OrderCard() {
   return (
     <div className="bg-white border-b">
-      <div className="flex items-center px-4 py-6 gap-6">
+      <div className="flex items-center lg:max-w-full lg:justify-evenly px-4 py-6 gap-6">
         {/* Product */}
         <div className="flex items-center gap-4 flex-1">
           <Image
@@ -92,7 +91,7 @@ function OrderCard() {
             className="w-20 h-24 rounded-lg object-cover"
           />
 
-          <div>
+          <div className="text-start h-22">
             <h3 className="text-sm font-medium">Momentum Hoodie</h3>
             <div className="text-xs text-gray-500">XXL</div>
             <div className="text-xs text-green-600">In Stock</div>
@@ -100,18 +99,16 @@ function OrderCard() {
         </div>
 
         {/* Payment Status */}
-        <div className="hidden md:block w-32 text-sm text-center">
-          Paid
-        </div>
+        <div className="hidden md:block md:w-1/4 text-sm text-center">Paid</div>
 
         {/* Delivery Status */}
-        <div className="hidden md:block w-32 text-sm text-green-600 text-center">
+        <div className="hidden md:block md:w-1/4 text-sm text-green-600 text-center">
           Delivered
         </div>
 
         {/* Repeat Button */}
-        <div className="w-28 flex justify-end">
-          <button className="bg-black text-white text-xs px-6 py-2 rounded-full">
+        <div className=" flex justify-end">
+          <button className="bg-black text-white text-xs px-6 py-2 cursor-pointer rounded-full">
             Repeat
           </button>
         </div>
@@ -119,7 +116,6 @@ function OrderCard() {
     </div>
   );
 }
-
 
 function Tracking() {
   return (
@@ -150,7 +146,7 @@ function WishList() {
 
 function WishlistCard() {
   return (
-    <div className="bg-white border-b">
+    <div className="bg-white border-b pb-3">
       <div className="relative flex items-center lg:items-start py-4  gap-6">
         {/* Remove */}
         <button className="absolute top-4 left-1 lg:top-4 lg:left-1 text-lg font-bold cursor-pointer">
@@ -167,15 +163,17 @@ function WishlistCard() {
             className="w-20 h-20 rounded-lg object-cover object-top"
           />
 
-          <div>
-            <h3 className="text-sm font-medium">Momentum Hoodie</h3>
-            <div className="text-xs text-gray-500">XXL</div>
+          <div className="flex flex-col items-start lg:items-end">
+            <div>
+              {" "}
+              <h3 className="text-sm font-medium">Momentum Hoodie</h3>
+              <p className="text-xs text-gray-500">XXL</p>
+            </div>
+            {/* Stock Status */}
+            <div className="text-sm  text-green-600">
+              <p className="md:absolute md:right-[30vw] md:top-2/4">In Stock</p>
+            </div>
           </div>
-        </div>
-
-        {/* Stock Status */}
-        <div className="hidden md:block w-32 text-sm text-green-600 text-center">
-          In Stock
         </div>
 
         {/* Add to cart */}
@@ -189,6 +187,22 @@ function WishlistCard() {
   );
 }
 
+const tabLabels: Record<string, string> = {
+  profile: "Personal Information",
+  orders: "Order History",
+  tracking: "Order Tracking",
+  wishlist: "Wishlist",
+};
+
+function AccountBreadcrumb({ activeTab }: { activeTab: string }) {
+  return (
+    <div className="px-4 font-Geist text-sm text-gray-500">
+      <span>Account</span>
+      <span className="mx-2">{">"}</span>
+      <span className="text-black font-medium">{tabLabels[activeTab]}</span>
+    </div>
+  );
+}
 
 /* -------------------- MAIN PAGE -------------------- */
 
@@ -207,10 +221,10 @@ const page = () => {
 
   return (
     <section>
-      <div className="relative h-15" />
+      <div className="relative h-30" />
 
-      <div className="px-4 font-Geist">
-        <BreadCrumbNav />
+      <div className="px-4 font-Geist pl-6">
+        <AccountBreadcrumb activeTab={activeTab} />
       </div>
 
       {/* -------- MOBILE TABS (unchanged) -------- */}
@@ -242,18 +256,18 @@ const page = () => {
       </div>
 
       {/* -------- DESKTOP LAYOUT -------- */}
-      <div className="md:flex md:gap-10 md:px-6 md:mt-10">
+      <div className="md:flex md:gap-10 md:px-6 md:mt-6">
         {/* Sidebar */}
         <div className="hidden md:block md:w-72">
-          <div className="bg-white rounded-2xl border shadow-sm py-2 px-6 font-Geist">
+          <div className="bg-white rounded-2xl border shadow-sm py-2 px-5 font-Geist">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 m-2 border-b text-sm transition ${
+                className={`w-full flex items-center gap-3 px-2 py-3 m-2 border-b md:text-lg rounded-lg transition-none duration-200 ${
                   activeTab === tab.id
-                    ? "bg-black text-white rounded-lg translate-x-2"
-                    : "text-gray-700 hover:bg-gray-100"
+                    ? "bg-black text-white scale-90"
+                    : "hover:bg-gray-100"
                 }`}
               >
                 {tab.icon}

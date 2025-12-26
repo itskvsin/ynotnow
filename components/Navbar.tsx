@@ -88,7 +88,7 @@ export default function Navbar() {
         >
           <div className="pointer-events-auto bg-white text-black px-16 py-14 space-y-4">
             <Link href="/All-Products" className="text-xl uppercase cursor-pointer">shop all</Link>
-            <p className="text-xl uppercase cursor-pointer">hoodies</p>
+            <Link href="/account/personal-information" className="text-xl uppercase cursor-pointer">hoodies</Link>
             <p className="text-xl uppercase cursor-pointer">t-shirt</p>
             <p className="text-xl uppercase cursor-pointer">accessories</p>
             <p className="text-xl uppercase cursor-pointer">about</p>

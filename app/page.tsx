@@ -62,7 +62,7 @@ export default function Home() {
   return (
     <ReactLenis root options={{ lerp: 0.1, smoothWheel: true, wheelMultiplier: 1.2 }}>
       <Reveal>
-        <Navbar />
+        {/* <Navbar /> */}
         <Hero />
         <About />
         <LastBg />

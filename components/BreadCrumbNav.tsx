@@ -11,20 +11,19 @@ const BreadCrumbNav = () => {
   return (
     <section>
       <nav>
-        <ol className="flex gap-1 text-sm capitalize">
-          <li>
+        <ol className="flex gap-1 text-md capitalize font-Geist">
+          {/* <li>
             <Link href="/">Home</Link>
-          </li>
+          </li> */}
           {segments.map((segment, index) => {
             const href = "/" + segments.slice(0, index + 1).join("/");
             const label = segment.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
             return (
               <li key={href} className="flex gap-1">
-                <span>{">"}</span>
                 {index === segments.length - 1 ? (
-                  <span className="font-medium">{label}</span>
+                 <span className="font-normal"><span>{"> "} </span>{label}</span>
                 ) : (
-                  <Link href={href}>{label}</Link>
+                  <p>{label}</p>
                 )}
               </li>
             );
