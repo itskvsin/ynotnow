@@ -15,7 +15,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
         {product.description}
       </p>
 
-      <p className="text-lg font-medium mt-3">
+      <p className="text-lg border-b-2 border-gray-200 pb-4 font-medium mt-3">
         ₹{product.price.toLocaleString()}
       </p>
 
@@ -27,9 +27,9 @@ export default function ProductInfo({ product }: ProductInfoProps) {
         <ColorSelector colors={product.colors} />
       </div>
 
-      <div className="mt-4 text-sm text-green-600">
+      {/* <div className="mt-4 text-sm text-green-600">
         {product.inStock ? "✓ In stock" : "Out of stock"}
-      </div>
+      </div> */}
     </div>
   );
 }

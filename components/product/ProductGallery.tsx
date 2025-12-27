@@ -48,7 +48,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
           <button
             key={img.id}
             onClick={() => setActiveIndex(i)}
-            className={`border rounded-md p-1 ${
+            className={`border rounded-md ${
               activeIndex === i ? "border-black" : "border-gray-300"
             }`}
           >
