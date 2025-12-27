@@ -1,11 +1,8 @@
 "use client"
 
-import Image from "next/image";
-import React from "react";
 import { RiFilter3Fill } from "react-icons/ri";
 import { BsFillGridFill } from "react-icons/bs";
 import { TfiLayoutGrid3Alt } from "react-icons/tfi";
-import ProductShowcase from "@/components/ProductShowcase";
 import FeaturesGrid from "@/components/commonDetail/FeaturesGrid";
 import About from "@/components/commonDetail/About";
 import LastBg from "@/components/commonDetail/LastBg";
@@ -35,7 +32,6 @@ const page = () => {
         <div className="rightSection flex items-center text-xl gap-2"><RiFilter3Fill /><p>FIlter & Sort</p></div>
       </div>
       <div>
-        {/* <ProductShowcase /> */}
         <ProductShowcaseClone />
       </div>
       <FeaturesGrid />
