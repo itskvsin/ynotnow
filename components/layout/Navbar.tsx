@@ -32,13 +32,15 @@ export default function Navbar() {
         transition={{ duration: 1 }}
         className="shrink-0"
       >
-        <Image
-          src={"/images/ynotnowLogo.png"}
-          width={100}
-          height={100}
-          alt="logo"
-          className="w-28 lg:w-40"
-        />
+        <Link href="/">
+          <Image
+            src={"/images/ynotnowLogo.png"}
+            width={100}
+            height={100}
+            alt="logo"
+            className="w-28 lg:w-40"
+          />
+        </Link>
       </motion.div>
 
       {/* ROTATING LOGO CENTER */}
@@ -84,11 +86,23 @@ export default function Navbar() {
           initial={{ opacity: 0, y: -20 }}
           animate={open ? { opacity: 1, y: -10 } : { opacity: 0, y: -10 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className={`${open ? "block" : "hidden"} absolute -right-25 top-20 pointer-events-none`}
+          className={`${
+            open ? "block" : "hidden"
+          } absolute -right-25 top-20 pointer-events-none`}
         >
           <div className="pointer-events-auto bg-white text-black px-16 py-14 space-y-4">
-            <Link href="/All-Products" className="text-xl uppercase cursor-pointer">shop all</Link>
-            <Link href="/account/personal-information" className="text-xl uppercase cursor-pointer">hoodies</Link>
+            <Link
+              href="/allProducts"
+              className="text-xl uppercase cursor-pointer"
+            >
+              shop all
+            </Link>
+            <Link
+              href="/account/personal-information"
+              className="text-xl uppercase cursor-pointer"
+            >
+              hoodies
+            </Link>
             <p className="text-xl uppercase cursor-pointer">t-shirt</p>
             <p className="text-xl uppercase cursor-pointer">accessories</p>
             <p className="text-xl uppercase cursor-pointer">about</p>

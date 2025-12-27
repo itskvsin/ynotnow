@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import About from "@/components/About";
-import Footer from "@/components/Footer";
+import About from "@/components/commonDetail/About";
+import Footer from "@/components/layout/Footer";
 import Hero from "@/components/Hero";
-import LastBg from "@/components/LastBg";
-import Navbar from "@/components/Navbar";
+import LastBg from "@/components/commonDetail/LastBg";
+import Navbar from "@/components/layout/Navbar";
 import { ReactLenis, useLenis } from "lenis/react";
 import Reveal from "@/components/effects/Reveal";
 

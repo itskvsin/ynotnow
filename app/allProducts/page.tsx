@@ -6,10 +6,11 @@ import { RiFilter3Fill } from "react-icons/ri";
 import { BsFillGridFill } from "react-icons/bs";
 import { TfiLayoutGrid3Alt } from "react-icons/tfi";
 import ProductShowcase from "@/components/ProductShowcase";
-import FeaturesGrid from "@/components/FeaturesGrid";
-import About from "@/components/About";
-import LastBg from "@/components/LastBg";
-import Footer from "@/components/Footer";
+import FeaturesGrid from "@/components/commonDetail/FeaturesGrid";
+import About from "@/components/commonDetail/About";
+import LastBg from "@/components/commonDetail/LastBg";
+import Footer from "@/components/layout/Footer";
+import ProductShowcaseClone from "@/components/ProductShowcaseClone";
 
 const Hero = () => {
   return (
@@ -29,12 +30,13 @@ const page = () => {
       <div className="relative">
         <Hero />
       </div>
-      <div className="h-18 w-full flex justify-between px-4 lg:items-center lg:justify-end lg:gap-10">
+      <div className="h-18 border-b w-full flex justify-between px-4 lg:items-center lg:justify-end lg:gap-10">
         <div className="leftSection flex gap-4 items-center"><BsFillGridFill className="text-black/50 text-2xl" /><TfiLayoutGrid3Alt className="text-xl" /></div>
         <div className="rightSection flex items-center text-xl gap-2"><RiFilter3Fill /><p>FIlter & Sort</p></div>
       </div>
-      <div className="-my-20">
-        <ProductShowcase />
+      <div>
+        {/* <ProductShowcase /> */}
+        <ProductShowcaseClone />
       </div>
       <FeaturesGrid />
       <About />
