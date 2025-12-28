@@ -40,12 +40,12 @@ export default function CartItemRow({
         <h3 className="text-sm font-medium">{item.title}</h3>
         <p className="text-xs text-gray-500">{item.size}</p>
         <p className="text-xs text-green-600">In Stock</p>
-        <p className="text-sm font-medium mt-1">
+        <p className="text-sm font-medium mt-4">
           ₹{item.price.toLocaleString()}
         </p>
       </div>
 
-      <div className="flex flex-col justify-center items-end gap-8">
+      <div className="flex flex-col justify-center items-end gap-11">
         <button className="text-gray-400 text-sm"><HiOutlineTrash className="text-lg" /></button>
 
         <div className="flex gap-2 bg-gray-100 items-end rounded-full px-3 py-1 text-sm">
