@@ -34,9 +34,9 @@ export default function CartSection({ items, summary }: CartSectionProps) {
   const allSelected = cartItems.every((i) => i.selected);
 
   return (
-    <section className="px-4 py-6">
+    <section className="px-4 py-6 w-full ">
       {/* Header */}
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-start mb-4 lg:max-w-7xl mx-auto">
         <label className="flex items-center gap-2 text-xl">
           <input
             type="checkbox"
@@ -54,9 +54,9 @@ export default function CartSection({ items, summary }: CartSectionProps) {
         <button className="text-red-500 text-lg">Remove</button>
       </div>
 
-      <div className="lg:flex lg:items-start lg:justify-between">
+      <div className="lg:flex lg:items-start lg:justify-between lg:max-w-7xl mx-auto lg:gap-10">
         {/* Items */}
-        <div className="space-y-4 lg:w-2/4">
+        <div className="space-y-4 lg:w-3/4">
           {cartItems.map((item) => (
             <CartItemRow
               key={item.id}

@@ -52,8 +52,8 @@ const mockCartSummary: CartSummary = {
 
 export default function CartPage() {
   return (
-    <div className="pb-28">
-      <div className="pl-4">
+    <div>
+      <div className="pl-4 lg:pl-10">
         <BreadCrumbNav />
       </div>
       {/* Cart Items + Order Summary */}

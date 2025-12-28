@@ -18,9 +18,9 @@ export default function ProductInfo({ product }: ProductInfoProps) {
   };
   return (
     <div className="mt-4">
-      <h1 className="text-2xl">{product.title}</h1>
+      <h1 className="text-2xl lg:text-4xl">{product.title}</h1>
 
-      <p className="text-sm text-gray-400 mt-1">{product.description}</p>
+      <p className="text-sm lg:text-md text-gray-400 mt-1">{product.description}</p>
 
       <p className="text-2xl border-b-2 border-gray-200 pb-8 mt-3">
         ₹{product.price.toLocaleString()}

@@ -10,9 +10,9 @@ export default function ProductDetailSection({
   product,
 }: ProductDetailSectionProps) {
   return (
-    <section className="px-4 py-6 max-w-md mx-auto">
+    <section className="py-6 max-w-lg mx-auto lg:flex">
       <ProductGallery images={product.images} />
-      <ProductInfo product={product} />
+      <div className="md:hidden block"><ProductInfo product={product} /></div>
     </section>
   );
 }

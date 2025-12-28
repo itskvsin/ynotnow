@@ -22,10 +22,10 @@ export default function QuantitySelector({
   };
 
   return (
-    <div className="flex items-center justify-between bg-gray-100 rounded-full px-6 py-4 my-6">
-      <button onClick={() => update(qty - 1)} className="text-2xl">−</button>
+    <div className="flex items-center justify-between lg:flex  bg-gray-100 rounded-full px-6 py-4 my-6">
+      <button onClick={() => update(qty - 1)} className="text-2xl cursor-pointer">−</button>
       <span className="text-lg font-medium">{qty.toString().padStart(2, "0")}</span>
-      <button onClick={() => update(qty + 1)} className="text-2xl">+</button>
+      <button onClick={() => update(qty + 1)} className="text-2xl cursor-pointer">+</button>
     </div>
   );
 }

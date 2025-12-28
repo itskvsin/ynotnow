@@ -18,7 +18,7 @@ export default function ProductMetaSection({
   accordionItems,
 }: ProductMetaSectionProps) {
   return (
-    <section className="px-4">
+    <section className="px-4 lg:px-0 lg:mt-4">
       <StockBar stock={stock} />
 
       <BenefitsGrid benefits={benefits} />

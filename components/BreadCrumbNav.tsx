@@ -18,7 +18,7 @@ const BreadCrumbNav = () => {
   return (
     <nav
       aria-label="Breadcrumb"
-      className="h-20 flex items-end"
+      className="h-20 lg:h-40 flex items-end"
     >
       <ol className="flex items-center gap-1 text-md font-Geist text-gray-600">
         {/* Home */}

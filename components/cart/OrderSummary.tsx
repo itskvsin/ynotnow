@@ -9,7 +9,7 @@ interface OrderSummaryProps {
 
 export default function OrderSummary({ summary }: OrderSummaryProps) {
   return (
-    <div className="bg-gray-100 rounded-xl p-4 mt-6">
+    <div className="lg:w-2/4 bg-gray-100 rounded-xl p-4 mt-6">
       <h3 className="text-lg font-medium mb-3">Order Summary</h3>
 
       <div className="space-y-2 text-sm text-gray-500">
@@ -38,7 +38,7 @@ export default function OrderSummary({ summary }: OrderSummaryProps) {
         <input
           type="text"
           placeholder={`Add promo code `}
-          className="flex-1 bg-gray-200 rounded-full px-4 py-2 text-sm outline-none"
+          className="flex-1 bg-gray-200 rounded-full px-4 py-3 text-sm outline-none"
         />
         <button className="bg-black text-white rounded-full px-7 py-3 text-sm">
           Apply
