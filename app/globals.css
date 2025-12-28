@@ -25,6 +25,19 @@
   font-family: 'Big Shoulders', sans-serif;
 }
 
+
+@font-face {
+  font-family: 'Brigends Expanded';
+  src: url('/fonts/BrigendsExpanded-nReK1.otf') format('truetype');
+  font-weight: 100 900; /* supports variable weights */
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-brigends {
+  font-family: 'Brigends Expanded', sans-serif;
+}
+
 /* :root {
   --background: #ffffff;
   --foreground: #171717;
