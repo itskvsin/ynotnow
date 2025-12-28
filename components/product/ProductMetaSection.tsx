@@ -4,21 +4,22 @@ import QuantitySelector from "./QuantitySelector";
 import ProductCTAs from "./ProductCTAs";
 import ProductAccordion from "./ProductAccordian";
 import { Benefit, AccordionItem } from "@/types/productMeta";
+import { StockLevel } from "@/types/productMeta";
 
 interface ProductMetaSectionProps {
-  inStock: boolean;
+  stock: StockLevel;
   benefits: Benefit[];
   accordionItems: AccordionItem[];
 }
 
 export default function ProductMetaSection({
-  inStock,
+  stock,
   benefits,
   accordionItems,
 }: ProductMetaSectionProps) {
   return (
     <section className="px-4">
-      <StockBar inStock={inStock} />
+      <StockBar stock={stock} />
 
       <BenefitsGrid benefits={benefits} />
 

@@ -20,7 +20,7 @@ export default function ProductAccordion({ items }: ProductAccordionProps) {
             }
             className="w-full flex justify-between items-center py-4 text-sm"
           >
-            {item.title}
+            <span className="flex items-center gap-2 text-lg">{item.icon}{item.title}</span>
             <span>{openId === item.id ? "−" : "+"}</span>
           </button>
 

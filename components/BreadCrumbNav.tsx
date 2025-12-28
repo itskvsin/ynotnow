@@ -10,11 +10,12 @@ const BreadCrumbNav = () => {
 
   return (
     <section>
-      <nav>
+      <nav className="h-20 flex items-end">
         <ol className="flex gap-1 text-md capitalize font-Geist">
-          {/* <li>
-            <Link href="/">Home</Link>
-          </li> */}
+          <li className="flex">
+            <p className="pr-1">Home</p>
+            <span>{"> "} </span>
+          </li>
           {segments.map((segment, index) => {
             const href = "/" + segments.slice(0, index + 1).join("/");
             const label = segment.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");

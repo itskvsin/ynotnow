@@ -12,8 +12,8 @@ export default function BenefitsGrid({ benefits }: BenefitsGridProps) {
           key={b.id}
           className="border rounded-xl p-3 text-sm"
         >
-          <div className="mb-2">{b.icon}</div>
-          <p className="font-medium">{b.title}</p>
+          <div className="mb-2 text-3xl">{b.icon}</div>
+          <p className="font-medium text-lg">{b.title}</p>
           <p className="text-xs text-gray-500 mt-1">{b.description}</p>
         </div>
       ))}

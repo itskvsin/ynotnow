@@ -15,4 +15,10 @@ export interface AccordionItem {
   id: string;
   title: string;
   content: string;
+  icon: React.ReactNode;
+}
+
+export interface StockLevel {
+  total: number;
+  remaining: number;
 }
