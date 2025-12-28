@@ -8,6 +8,7 @@ import FeaturesGrid from "@/components/commonDetail/FeaturesGrid";
 import About from "@/components/commonDetail/About";
 import LastBg from "@/components/commonDetail/LastBg";
 import Footer from "@/components/layout/Footer";
+import BreadCrumbNav from "@/components/BreadCrumbNav";
 
 const mockCartItems: CartItem[] = [
   {
@@ -30,6 +31,16 @@ const mockCartItems: CartItem[] = [
     quantity: 1,
     selected: true,
   },
+    {
+    id: "3",
+    title: "Momentum Hoodie",
+    size: "XXL",
+    price: 2299,
+    imageUrl: "/images/hoodies/grayBgHoodie.jpg",
+    inStock: true,
+    quantity: 1,
+    selected: true,
+  },
 ];
 
 const mockCartSummary: CartSummary = {
@@ -42,29 +53,22 @@ const mockCartSummary: CartSummary = {
 export default function CartPage() {
   return (
     <div className="pb-28">
+      <div className="pl-4">
+        <BreadCrumbNav />
+      </div>
       {/* Cart Items + Order Summary */}
       <CartSection items={mockCartItems} summary={mockCartSummary} />
 
       {/* Shipping Calculator */}
       <ShippingCalculator />
-
-      <ShippingInfoBanner
-        data={{
-          id: "free-shipping",
-          title: "There is one shipping rate for your address:",
-          description: "Standard Shipping: ",
-          shippingCost: "INR 299.00.",
-          minOrderAmount: 4999,
-        }}
-      />
       <div>
-              <div>
-                {" "}
-                <FeaturesGrid />
-                <About />
-                <LastBg />
-                <Footer />
-              </div>
+        <div>
+          {" "}
+          <FeaturesGrid />
+          <About />
+          <LastBg />
+          <Footer />
+        </div>
       </div>
     </div>
   );

@@ -10,18 +10,13 @@ interface CartSectionProps {
   summary: CartSummary;
 }
 
-export default function CartSection({
-  items,
-  summary,
-}: CartSectionProps) {
+export default function CartSection({ items, summary }: CartSectionProps) {
   const [cartItems, setCartItems] = useState(items);
 
   const toggleItem = (id: string) => {
     setCartItems((prev) =>
       prev.map((item) =>
-        item.id === id
-          ? { ...item, selected: !item.selected }
-          : item
+        item.id === id ? { ...item, selected: !item.selected } : item
       )
     );
   };
@@ -51,6 +46,7 @@ export default function CartSection({
                 prev.map((i) => ({ ...i, selected: !allSelected }))
               )
             }
+            className="accent-black"
           />
           Select all
         </label>
@@ -58,21 +54,25 @@ export default function CartSection({
         <button className="text-red-500 text-sm">Remove</button>
       </div>
 
-      {/* Items */}
-      <div className="space-y-4">
-        {cartItems.map((item) => (
-          <CartItemRow
-            key={item.id}
-            item={item}
-            onToggle={() => toggleItem(item.id)}
-            onIncrease={() => updateQty(item.id, 1)}
-            onDecrease={() => updateQty(item.id, -1)}
-          />
-        ))}
-      </div>
+      <div className="lg:flex lg:items-start lg:justify-between">
+        {/* Items */}
+        <div className="space-y-4 lg:w-2/4">
+          {cartItems.map((item) => (
+            <CartItemRow
+              key={item.id}
+              item={item}
+              onToggle={() => toggleItem(item.id)}
+              onIncrease={() => updateQty(item.id, 1)}
+              onDecrease={() => updateQty(item.id, -1)}
+            />
+          ))}
+        </div>
 
-      {/* Summary */}
-      <OrderSummary summary={summary} />
+        {/* <div className="w-1/4"> */}
+          {/* Summary */}
+          <OrderSummary summary={summary} />
+        {/* </div> */}
+      </div>
     </section>
   );
 }

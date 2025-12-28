@@ -1,37 +1,63 @@
 "use client";
 
-import React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 const BreadCrumbNav = () => {
-  const pathName = usePathname();
-  const segments = pathName.split("/").filter(Boolean);
+  const pathname = usePathname();
+  const segments = pathname.split("/").filter(Boolean);
+
+  const formatLabel = (segment: string) =>
+    segment
+      .split("-")
+      .map(
+        (word) => word.charAt(0).toUpperCase() + word.slice(1)
+      )
+      .join(" ");
 
   return (
-    <section>
-      <nav className="h-20 flex items-end">
-        <ol className="flex gap-1 text-md capitalize font-Geist">
-          <li className="flex">
-            <p className="pr-1">Home</p>
-            <span>{"> "} </span>
-          </li>
-          {segments.map((segment, index) => {
-            const href = "/" + segments.slice(0, index + 1).join("/");
-            const label = segment.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
-            return (
-              <li key={href} className="flex gap-1">
-                {index === segments.length - 1 ? (
-                 <span className="font-normal"><span>{"> "} </span>{label}</span>
-                ) : (
-                  <p>{label}</p>
-                )}
-              </li>
-            );
-          })}
-        </ol>
-      </nav>
-    </section>
+    <nav
+      aria-label="Breadcrumb"
+      className="h-20 flex items-end"
+    >
+      <ol className="flex items-center gap-1 text-md font-Geist text-gray-600">
+        {/* Home */}
+        <li>
+          <Link href="/" className="hover:text-black">
+            Home
+          </Link>
+        </li>
+
+        {segments.map((segment, index) => {
+          const href =
+            "/" + segments.slice(0, index + 1).join("/");
+          const isLast = index === segments.length - 1;
+          const label = formatLabel(segment);
+
+          return (
+            <li key={href} className="flex items-center gap-1">
+              <span className="text-gray-400">{">"}</span>
+
+              {isLast ? (
+                <span
+                  className="text-black font-normal"
+                  aria-current="page"
+                >
+                  {label}
+                </span>
+              ) : (
+                <Link
+                  href={href}
+                  className="hover:text-black"
+                >
+                  {label}
+                </Link>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
   );
 };
 

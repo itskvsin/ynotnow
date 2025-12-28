@@ -23,7 +23,7 @@ export default function Navbar() {
   return (
     <motion.nav
       onMouseLeave={() => isDesktop && setOpen(false)}
-      className="fixed top-0 left-0 w-full z-50 bg-black/60 border-b border-white px-8 lg:px-24 py-2 flex items-center justify-between"
+      className="fixed top-0 left-0 w-full z-50 bg-black/60 border-b border-white px-4 lg:px-24 py-2 flex items-center justify-between"
     >
       {/* LOGO LEFT */}
       <motion.div
