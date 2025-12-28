@@ -37,7 +37,7 @@ export default function CartSection({ items, summary }: CartSectionProps) {
     <section className="px-4 py-6">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
-        <label className="flex items-center gap-2 text-sm">
+        <label className="flex items-center gap-2 text-xl">
           <input
             type="checkbox"
             checked={allSelected}
@@ -51,7 +51,7 @@ export default function CartSection({ items, summary }: CartSectionProps) {
           Select all
         </label>
 
-        <button className="text-red-500 text-sm">Remove</button>
+        <button className="text-red-500 text-lg">Remove</button>
       </div>
 
       <div className="lg:flex lg:items-start lg:justify-between">
