@@ -341,6 +341,24 @@ export const CART_GET_QUERY = `
           currencyCode
         }
       }
+      deliveryGroups {
+        deliveryAddress {
+          address1
+          address2
+          city
+          province
+          country
+          zip
+        }
+        deliveryOptions {
+          handle
+          title
+          cost {
+            amount
+            currencyCode
+          }
+        }
+      }
     }
   }
 `;
@@ -580,6 +598,24 @@ export interface ShopifyCart {
       currencyCode: string;
     };
   };
+  deliveryGroups?: Array<{
+    deliveryAddress: {
+      address1: string | null;
+      address2: string | null;
+      city: string | null;
+      province: string | null;
+      country: string | null;
+      zip: string | null;
+    };
+    deliveryOptions: Array<{
+      handle: string;
+      title: string;
+      cost: {
+        amount: string;
+        currencyCode: string;
+      };
+    }>;
+  }>;
 }
 
 export interface CartCreateResponse {
@@ -972,9 +1008,9 @@ export async function updateCartDiscountCodes(
 
 // ==================== SHIPPING RATES ====================
 
-export const CART_DELIVERY_GROUPS_UPDATE_MUTATION = `
-  mutation cartDeliveryGroupsUpdate($cartId: ID!, $deliveryGroups: [CartDeliveryGroupInput!]!) {
-    cartDeliveryGroupsUpdate(cartId: $cartId, deliveryGroups: $deliveryGroups) {
+export const CART_BUYER_IDENTITY_UPDATE_MUTATION = `
+  mutation cartBuyerIdentityUpdate($cartId: ID!, $buyerIdentity: CartBuyerIdentityInput!) {
+    cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
       cart {
         id
         deliveryGroups {
@@ -1004,8 +1040,8 @@ export const CART_DELIVERY_GROUPS_UPDATE_MUTATION = `
   }
 `;
 
-export interface CartDeliveryGroupsUpdateResponse {
-  cartDeliveryGroupsUpdate: {
+export interface CartBuyerIdentityUpdateResponse {
+  cartBuyerIdentityUpdate: {
     cart: {
       id: string;
       deliveryGroups: Array<{
@@ -1054,6 +1090,7 @@ export interface ShippingRate {
 
 /**
  * Gets shipping rates for a cart with delivery address
+ * Uses cartBuyerIdentityUpdate to set the delivery address, then queries the cart to get shipping rates
  * @param cartId - Cart ID
  * @param address - Shipping address
  * @returns Promise resolving to array of shipping rates
@@ -1063,36 +1100,39 @@ export async function getShippingRates(
   address: ShippingAddress
 ): Promise<ShippingRate[]> {
   try {
-    const response = await shopifyClient.request<CartDeliveryGroupsUpdateResponse>(
-      CART_DELIVERY_GROUPS_UPDATE_MUTATION,
+    // First, update the cart buyer identity with the delivery address
+    const updateResponse = await shopifyClient.request<CartBuyerIdentityUpdateResponse>(
+      CART_BUYER_IDENTITY_UPDATE_MUTATION,
       {
         variables: {
           cartId,
-          deliveryGroups: [
-            {
-              deliveryAddress: {
-                address1: address.address1 || null,
-                address2: address.address2 || null,
-                city: address.city || null,
-                province: address.province || null,
-                country: address.country,
-                zip: address.zip || null,
+          buyerIdentity: {
+            deliveryAddressPreferences: [
+              {
+                deliveryAddress: {
+                  address1: address.address1 || null,
+                  address2: address.address2 || null,
+                  city: address.city || null,
+                  province: address.province || null,
+                  countryCode: address.country.toUpperCase(),
+                  zip: address.zip || null,
+                },
               },
-            },
-          ],
+            ],
+          },
         },
       }
     );
 
-    if (response.errors) {
-      throw new Error(`Shopify API errors: ${JSON.stringify(response.errors)}`);
+    if (updateResponse.errors) {
+      throw new Error(`Shopify API errors: ${JSON.stringify(updateResponse.errors)}`);
     }
 
-    if (!response.data) {
+    if (!updateResponse.data) {
       throw new Error("No data returned from Shopify API");
     }
 
-    const { cart, userErrors } = response.data.cartDeliveryGroupsUpdate;
+    const { userErrors } = updateResponse.data.cartBuyerIdentityUpdate;
 
     if (userErrors && userErrors.length > 0) {
       throw new Error(
@@ -1100,7 +1140,25 @@ export async function getShippingRates(
       );
     }
 
-    if (!cart || !cart.deliveryGroups || cart.deliveryGroups.length === 0) {
+    // Now query the cart to get delivery groups with shipping rates
+    const cartResponse = await shopifyClient.request<CartGetResponse>(
+      CART_GET_QUERY,
+      {
+        variables: { id: cartId },
+      }
+    );
+
+    if (cartResponse.errors) {
+      throw new Error(`Shopify API errors: ${JSON.stringify(cartResponse.errors)}`);
+    }
+
+    if (!cartResponse.data || !cartResponse.data.cart) {
+      return [];
+    }
+
+    const cart = cartResponse.data.cart;
+
+    if (!cart.deliveryGroups || cart.deliveryGroups.length === 0) {
       return [];
     }
 
