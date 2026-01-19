@@ -3,71 +3,71 @@
 import CartSection from "@/components/cart/CartSection";
 import ShippingCalculator from "@/components/cart/ShippingCalculator";
 import ShippingInfoBanner from "@/components/cart/ShippinhInfoBanner";
-import { CartItem, CartSummary } from "@/types/cart";
-import FeaturesGrid from "@/components/commonDetail/FeaturesGrid";
-import About from "@/components/commonDetail/About";
-import LastBg from "@/components/commonDetail/LastBg";
-import Footer from "@/components/layout/Footer";
 import BreadCrumbNav from "@/components/BreadCrumbNav";
-
-const mockCartItems: CartItem[] = [
-  {
-    id: "1",
-    title: "Momentum Hoodie",
-    size: "XXL",
-    price: 2299,
-    imageUrl: "/images/hoodies/blueHoodie.png",
-    inStock: true,
-    quantity: 1,
-    selected: true,
-  },
-  {
-    id: "2",
-    title: "Momentum Hoodie",
-    size: "XXL",
-    price: 2299,
-    imageUrl: "/images/hoodies/grayHoodie.png",
-    inStock: true,
-    quantity: 1,
-    selected: true,
-  },
-    {
-    id: "3",
-    title: "Momentum Hoodie",
-    size: "XXL",
-    price: 2299,
-    imageUrl: "/images/hoodies/grayBgHoodie.jpg",
-    inStock: true,
-    quantity: 1,
-    selected: true,
-  },
-];
-
-const mockCartSummary: CartSummary = {
-  subtotal: 6299,
-  discount: 29,
-  deliveryFee: 299,
-  total: 7499,
-};
+import { useCart } from "@/hooks/useCart";
+import Link from "next/link";
 
 export default function CartPage() {
+  const { items, summary, isLoading, error, checkoutUrl } = useCart();
+
+  if (isLoading) {
+    return (
+      <div>
+        <div className="pl-4 lg:pl-10">
+          <BreadCrumbNav />
+        </div>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <p>Loading cart...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div>
+        <div className="pl-4 lg:pl-10">
+          <BreadCrumbNav />
+        </div>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <p className="text-red-500">Error: {error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (items.length === 0) {
+    return (
+      <div>
+        <div className="pl-4 lg:pl-10">
+          <BreadCrumbNav />
+        </div>
+        <div className="flex flex-col items-center justify-center min-h-[400px] px-4">
+          <h2 className="text-2xl font-medium mb-4">Your cart is empty</h2>
+          <p className="text-gray-500 mb-6">Add some items to get started</p>
+          <Link
+            href="/products"
+            className="bg-black text-white px-6 py-3 rounded-full"
+          >
+            Continue Shopping
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="pl-4 lg:pl-10">
         <BreadCrumbNav />
       </div>
       {/* Cart Items + Order Summary */}
-      <CartSection items={mockCartItems} summary={mockCartSummary} />
+      <CartSection items={items} summary={summary} checkoutUrl={checkoutUrl} />
 
       {/* Shipping Calculator */}
       <ShippingCalculator />
       <div>
         <div>
-          {" "}
-          <FeaturesGrid />
-          <About />
-          <LastBg />
-          <Footer />
         </div>
       </div>
     </div>

@@ -3,10 +3,6 @@
 import BreadCrumbNav from "@/components/BreadCrumbNav";
 import tabs from "@/data/PersonalTabs";
 import Link from "next/link";
-import FeaturesGrid from "@/components/commonDetail/FeaturesGrid";
-import About from "@/components/commonDetail/About";
-import LastBg from "@/components/commonDetail/LastBg";
-import Footer from "@/components/layout/Footer";
 import Image from "next/image";
 
 import React, { useState, useRef } from "react";
@@ -287,10 +283,6 @@ const page = () => {
       </div>
 
       <div className="mt-14">
-        <FeaturesGrid />
-        <About />
-        <LastBg />
-        <Footer />
       </div>
     </section>
   );

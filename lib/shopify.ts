@@ -6,14 +6,10 @@ import type {
 } from "@/types/shopify";
 
 // Get Shopify credentials from environment variables
-const shopifyDomain =
-  process.env.SHOPIFY_STORE_DOMAIN ;
-const shopifyToken =
-  process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN 
-  ;
+// This only runs on the server, so it's safe
+const shopifyDomain = process.env.SHOPIFY_STORE_DOMAIN;
+const shopifyToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
 const apiVersion = "2025-01";
-
-console.log("shopify domain : ", shopifyDomain, shopifyToken);
 
 if (!shopifyDomain || !shopifyToken) {
   throw new Error(
@@ -110,6 +106,10 @@ export const GET_PRODUCT_BY_HANDLE_QUERY = `
               currencyCode
             }
             availableForSale
+            selectedOptions {
+              name
+              value
+            }
           }
         }
       }
@@ -222,6 +222,608 @@ export async function getCollections(
     return response.data as ShopifyCollectionsResponse;
   } catch (error) {
     console.error("Error fetching collections:", error);
+    throw error;
+  }
+}
+
+// Cart-related GraphQL mutations and queries
+
+export const CART_CREATE_MUTATION = `
+  mutation cartCreate($input: CartInput!) {
+    cartCreate(input: $input) {
+      cart {
+        id
+        checkoutUrl
+        totalQuantity
+        lines(first: 250) {
+          edges {
+            node {
+              id
+              quantity
+              merchandise {
+                ... on ProductVariant {
+                  id
+                  title
+                  price {
+                    amount
+                    currencyCode
+                  }
+                  product {
+                    id
+                    title
+                    handle
+                    featuredImage {
+                      url
+                      altText
+                    }
+                  }
+                  selectedOptions {
+                    name
+                    value
+                  }
+                }
+              }
+            }
+          }
+        }
+        cost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+          subtotalAmount {
+            amount
+            currencyCode
+          }
+        }
+      }
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const CART_GET_QUERY = `
+  query getCart($id: ID!) {
+    cart(id: $id) {
+      id
+      checkoutUrl
+      totalQuantity
+      lines(first: 250) {
+        edges {
+          node {
+            id
+            quantity
+            merchandise {
+              ... on ProductVariant {
+                id
+                title
+                price {
+                  amount
+                  currencyCode
+                }
+                product {
+                  id
+                  title
+                  handle
+                  featuredImage {
+                    url
+                    altText
+                  }
+                }
+                selectedOptions {
+                  name
+                  value
+                }
+              }
+            }
+          }
+        }
+      }
+      cost {
+        totalAmount {
+          amount
+          currencyCode
+        }
+        subtotalAmount {
+          amount
+          currencyCode
+        }
+      }
+    }
+  }
+`;
+
+export const CART_LINES_ADD_MUTATION = `
+  mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
+    cartLinesAdd(cartId: $cartId, lines: $lines) {
+      cart {
+        id
+        checkoutUrl
+        totalQuantity
+        lines(first: 250) {
+          edges {
+            node {
+              id
+              quantity
+              merchandise {
+                ... on ProductVariant {
+                  id
+                  title
+                  price {
+                    amount
+                    currencyCode
+                  }
+                  product {
+                    id
+                    title
+                    handle
+                    featuredImage {
+                      url
+                      altText
+                    }
+                  }
+                  selectedOptions {
+                    name
+                    value
+                  }
+                }
+              }
+            }
+          }
+        }
+        cost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+          subtotalAmount {
+            amount
+            currencyCode
+          }
+        }
+      }
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const CART_LINES_UPDATE_MUTATION = `
+  mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+    cartLinesUpdate(cartId: $cartId, lines: $lines) {
+      cart {
+        id
+        checkoutUrl
+        totalQuantity
+        lines(first: 250) {
+          edges {
+            node {
+              id
+              quantity
+              merchandise {
+                ... on ProductVariant {
+                  id
+                  title
+                  price {
+                    amount
+                    currencyCode
+                  }
+                  product {
+                    id
+                    title
+                    handle
+                    featuredImage {
+                      url
+                      altText
+                    }
+                  }
+                  selectedOptions {
+                    name
+                    value
+                  }
+                }
+              }
+            }
+          }
+        }
+        cost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+          subtotalAmount {
+            amount
+            currencyCode
+          }
+        }
+      }
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const CART_LINES_REMOVE_MUTATION = `
+  mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
+    cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
+      cart {
+        id
+        checkoutUrl
+        totalQuantity
+        lines(first: 250) {
+          edges {
+            node {
+              id
+              quantity
+              merchandise {
+                ... on ProductVariant {
+                  id
+                  title
+                  price {
+                    amount
+                    currencyCode
+                  }
+                  product {
+                    id
+                    title
+                    handle
+                    featuredImage {
+                      url
+                      altText
+                    }
+                  }
+                  selectedOptions {
+                    name
+                    value
+                  }
+                }
+              }
+            }
+          }
+        }
+        cost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+          subtotalAmount {
+            amount
+            currencyCode
+          }
+        }
+      }
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+// Cart API functions
+
+export interface CartLineInput {
+  merchandiseId: string;
+  quantity: number;
+  attributes?: Array<{ key: string; value: string }>;
+}
+
+export interface CartLineUpdateInput {
+  id: string;
+  quantity: number;
+}
+
+export interface ShopifyCart {
+  id: string;
+  checkoutUrl: string;
+  totalQuantity: number;
+  lines: {
+    edges: Array<{
+      node: {
+        id: string;
+        quantity: number;
+        merchandise: {
+          id: string;
+          title: string;
+          price: {
+            amount: string;
+            currencyCode: string;
+          };
+          product: {
+            id: string;
+            title: string;
+            handle: string;
+            featuredImage: {
+              url: string;
+              altText: string | null;
+            } | null;
+          };
+          selectedOptions: Array<{
+            name: string;
+            value: string;
+          }>;
+        };
+      };
+    }>;
+  };
+  cost: {
+    totalAmount: {
+      amount: string;
+      currencyCode: string;
+    };
+    subtotalAmount: {
+      amount: string;
+      currencyCode: string;
+    };
+  };
+}
+
+export interface CartCreateResponse {
+  cartCreate: {
+    cart: ShopifyCart | null;
+    userErrors: Array<{
+      field: string[];
+      message: string;
+    }>;
+  };
+}
+
+export interface CartGetResponse {
+  cart: ShopifyCart | null;
+}
+
+export interface CartLinesAddResponse {
+  cartLinesAdd: {
+    cart: ShopifyCart | null;
+    userErrors: Array<{
+      field: string[];
+      message: string;
+    }>;
+  };
+}
+
+export interface CartLinesUpdateResponse {
+  cartLinesUpdate: {
+    cart: ShopifyCart | null;
+    userErrors: Array<{
+      field: string[];
+      message: string;
+    }>;
+  };
+}
+
+export interface CartLinesRemoveResponse {
+  cartLinesRemove: {
+    cart: ShopifyCart | null;
+    userErrors: Array<{
+      field: string[];
+      message: string;
+    }>;
+  };
+}
+
+/**
+ * Creates a new cart
+ * @returns Promise resolving to cart ID
+ */
+export async function createCart(): Promise<string> {
+  try {
+    const response = await shopifyClient.request<CartCreateResponse>(
+      CART_CREATE_MUTATION,
+      {
+        variables: {
+          input: {},
+        },
+      }
+    );
+
+    if (response.errors) {
+      throw new Error(`Shopify API errors: ${JSON.stringify(response.errors)}`);
+    }
+
+    if (!response.data) {
+      throw new Error("No data returned from Shopify API");
+    }
+
+    const { cart, userErrors } = response.data.cartCreate;
+
+    if (userErrors && userErrors.length > 0) {
+      throw new Error(
+        `Cart creation errors: ${userErrors.map((e) => e.message).join(", ")}`
+      );
+    }
+
+    if (!cart) {
+      throw new Error("Failed to create cart");
+    }
+
+    return cart.id;
+  } catch (error) {
+    console.error("Error creating cart:", error);
+    throw error;
+  }
+}
+
+/**
+ * Fetches cart data by ID
+ * @param cartId - Cart ID
+ * @returns Promise resolving to ShopifyCart
+ */
+export async function getCart(cartId: string): Promise<ShopifyCart | null> {
+  try {
+    if (!cartId) {
+      return null;
+    }
+
+    const response = await shopifyClient.request<CartGetResponse>(
+      CART_GET_QUERY,
+      {
+        variables: { id: cartId },
+      }
+    );
+
+    if (response.errors) {
+      throw new Error(`Shopify API errors: ${JSON.stringify(response.errors)}`);
+    }
+
+    if (!response.data) {
+      return null;
+    }
+
+    return response.data.cart;
+  } catch (error) {
+    console.error("Error fetching cart:", error);
+    throw error;
+  }
+}
+
+/**
+ * Adds items to cart
+ * @param cartId - Cart ID
+ * @param lines - Array of cart line items to add
+ * @returns Promise resolving to updated cart
+ */
+export async function addToCart(
+  cartId: string,
+  lines: CartLineInput[]
+): Promise<ShopifyCart> {
+  try {
+    const response = await shopifyClient.request<CartLinesAddResponse>(
+      CART_LINES_ADD_MUTATION,
+      {
+        variables: {
+          cartId,
+          lines,
+        },
+      }
+    );
+
+    if (response.errors) {
+      throw new Error(`Shopify API errors: ${JSON.stringify(response.errors)}`);
+    }
+
+    if (!response.data) {
+      throw new Error("No data returned from Shopify API");
+    }
+
+    const { cart, userErrors } = response.data.cartLinesAdd;
+
+    if (userErrors && userErrors.length > 0) {
+      throw new Error(
+        `Add to cart errors: ${userErrors.map((e) => e.message).join(", ")}`
+      );
+    }
+
+    if (!cart) {
+      throw new Error("Failed to add items to cart");
+    }
+
+    return cart;
+  } catch (error) {
+    console.error("Error adding to cart:", error);
+    throw error;
+  }
+}
+
+/**
+ * Updates cart line items
+ * @param cartId - Cart ID
+ * @param lines - Array of cart line updates
+ * @returns Promise resolving to updated cart
+ */
+export async function updateCartItems(
+  cartId: string,
+  lines: CartLineUpdateInput[]
+): Promise<ShopifyCart> {
+  try {
+    const response = await shopifyClient.request<CartLinesUpdateResponse>(
+      CART_LINES_UPDATE_MUTATION,
+      {
+        variables: {
+          cartId,
+          lines,
+        },
+      }
+    );
+
+    if (response.errors) {
+      throw new Error(`Shopify API errors: ${JSON.stringify(response.errors)}`);
+    }
+
+    if (!response.data) {
+      throw new Error("No data returned from Shopify API");
+    }
+
+    const { cart, userErrors } = response.data.cartLinesUpdate;
+
+    if (userErrors && userErrors.length > 0) {
+      throw new Error(
+        `Update cart errors: ${userErrors.map((e) => e.message).join(", ")}`
+      );
+    }
+
+    if (!cart) {
+      throw new Error("Failed to update cart");
+    }
+
+    return cart;
+  } catch (error) {
+    console.error("Error updating cart:", error);
+    throw error;
+  }
+}
+
+/**
+ * Removes items from cart
+ * @param cartId - Cart ID
+ * @param lineIds - Array of line item IDs to remove
+ * @returns Promise resolving to updated cart
+ */
+export async function removeFromCart(
+  cartId: string,
+  lineIds: string[]
+): Promise<ShopifyCart> {
+  try {
+    const response = await shopifyClient.request<CartLinesRemoveResponse>(
+      CART_LINES_REMOVE_MUTATION,
+      {
+        variables: {
+          cartId,
+          lineIds,
+        },
+      }
+    );
+
+    if (response.errors) {
+      throw new Error(`Shopify API errors: ${JSON.stringify(response.errors)}`);
+    }
+
+    if (!response.data) {
+      throw new Error("No data returned from Shopify API");
+    }
+
+    const { cart, userErrors } = response.data.cartLinesRemove;
+
+    if (userErrors && userErrors.length > 0) {
+      throw new Error(
+        `Remove from cart errors: ${userErrors.map((e) => e.message).join(", ")}`
+      );
+    }
+
+    if (!cart) {
+      throw new Error("Failed to remove items from cart");
+    }
+
+    return cart;
+  } catch (error) {
+    console.error("Error removing from cart:", error);
     throw error;
   }
 }

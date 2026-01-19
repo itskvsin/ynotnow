@@ -15,3 +15,9 @@ export interface CartSummary {
   deliveryFee: number;
   total: number;
 }
+
+export interface CommerceCart {
+  id: string;
+  checkoutUrl: string | null;
+  totalQuantity: number;
+}

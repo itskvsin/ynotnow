@@ -5,9 +5,17 @@ import { PiPackage } from "react-icons/pi";
 
 interface OrderSummaryProps {
   summary: CartSummary;
+  checkoutUrl?: string | null;
 }
 
-export default function OrderSummary({ summary }: OrderSummaryProps) {
+export default function OrderSummary({ summary, checkoutUrl }: OrderSummaryProps) {
+  const handleCheckout = () => {
+    if (checkoutUrl) {
+      window.location.href = checkoutUrl;
+    } else {
+      alert("Checkout URL not available. Please try again.");
+    }
+  };
   return (
     <div className="lg:w-2/4 bg-gray-100 rounded-xl p-4 mt-6">
       <h3 className="text-lg font-medium mb-3">Order Summary</h3>
@@ -45,7 +53,11 @@ export default function OrderSummary({ summary }: OrderSummaryProps) {
         </button>
       </div>
 
-      <button className="w-full bg-black text-white rounded-full py-4 mt-4 text-sm">
+      <button
+        onClick={handleCheckout}
+        disabled={!checkoutUrl}
+        className="w-full bg-black text-white rounded-full py-4 mt-4 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+      >
         Go to Checkout →
       </button>
     </div>

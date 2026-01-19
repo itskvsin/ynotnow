@@ -5,7 +5,7 @@ import Image from "next/image";
 export default function LastBg() {
   return (
     <section className="relative w-full h-[28vh] lg:h-[90vh] overflow-hidden">
-      {/* <video
+      <video
         className="absolute inset-0 w-full h-full object-cover lg:object-cover"
         src="/videos/Firefly_Slow_subtle_animation_Mystery_vibe.webm"
         autoPlay
@@ -13,15 +13,15 @@ export default function LastBg() {
         muted
         playsInline
         // preload="auto"
-      /> */}
+      />
       {/* <div className="h-full w-full bg-[url('/images/lastBg.png')] bg-bottom bg-contain bg-no-repeat" /> */}
-      <Image
+      {/* <Image
         src="/images/lastBg.png"
         width={2000}
         height={2000}
         className="w-full h-full object-contain object-bottom"
         alt="last background"
-      />
+      /> */}
       {/* Optional Overlay (if needed later) */}
       {/* <div className="absolute inset-0 bg-black/20" /> */}
     </section>

@@ -7,15 +7,41 @@ import ColorSelector from "./ColorSelector";
 
 interface ProductInfoProps {
   product: Product;
+  onSizeChange?: (size: string) => void;
+  onColorChange?: (color: string) => void;
+  selectedSize?: string | null;
+  selectedColor?: string | null;
 }
 
-export default function ProductInfo({ product }: ProductInfoProps) {
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const handleColorChange = (color: string) => {
-    setSelectedColor(color);
+export default function ProductInfo({
+  product,
+  onSizeChange,
+  onColorChange,
+  selectedSize: controlledSize,
+  selectedColor: controlledColor,
+}: ProductInfoProps) {
+  const [internalSize, setInternalSize] = useState<string | null>(null);
+  const [internalColor, setInternalColor] = useState<string | null>(null);
 
-    console.log("Selected color:", color);
+  const selectedSize = controlledSize ?? internalSize;
+  const selectedColor = controlledColor ?? internalColor;
+
+  const handleSizeChange = (size: string) => {
+    if (onSizeChange) {
+      onSizeChange(size);
+    } else {
+      setInternalSize(size);
+    }
   };
+
+  const handleColorChange = (color: string) => {
+    if (onColorChange) {
+      onColorChange(color);
+    } else {
+      setInternalColor(color);
+    }
+  };
+
   return (
     <div className="mt-4">
       <h1 className="text-2xl lg:text-4xl">{product.title}</h1>
@@ -27,7 +53,11 @@ export default function ProductInfo({ product }: ProductInfoProps) {
       </p>
 
       <div className="mt-4">
-        <SizeSelector sizes={product.sizes} />
+        <SizeSelector
+          sizes={product.sizes}
+          selectedSize={selectedSize}
+          onSizeChange={handleSizeChange}
+        />
       </div>
 
       <div className="mt-4">

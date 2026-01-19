@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="bg-black text-white py-6 px-6 md:px-20">
@@ -10,26 +12,26 @@ export default function Footer() {
           className="flex flex-row sm:flex-row items-center gap-10 sm:gap-10"
           aria-label="Footer navigation"
         >
-          <a
+          <Link
             href="#"
             className="text-sm hover:underline"
           >
             Terms &amp; Conditions
-          </a>
+          </Link>
 
-          <a
+          <Link
             href="#"
             className="text-sm hover:underline"
           >
             Privacy Policy
-          </a>
+          </Link>
 
-          <a
+          <Link
             href="#"
             className="text-sm hover:underline"
           >
             Return Policy
-          </a>
+          </Link>
         </nav>
       </div>
     </footer>

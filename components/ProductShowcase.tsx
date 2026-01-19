@@ -74,7 +74,7 @@ export default function ProductShowcase() {
         {/* CTA BUTTON */}
         {!loading && products.length > 0 && (
           <div className="flex justify-center mt-12">
-            <Link href="/shop">
+            <Link href="/products">
               <button className="relative overflow-hidden px-10 py-3 border border-black rounded-full text-lg transition-all duration-300 group">
                 <span className="relative z-10 group-hover:text-white transition-colors duration-300">
                   Show Now

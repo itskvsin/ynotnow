@@ -23,7 +23,7 @@ export default function Navbar() {
   return (
     <motion.nav
       onMouseLeave={() => isDesktop && setOpen(false)}
-      className="fixed top-0 left-0 w-full z-50 bg-black/60 border-b border-white px-4 lg:px-24 py-2 flex items-center justify-between"
+      className="fixed max-h-[12vh] top-0 left-0 w-full z-50 bg-black/60 border-b border-white px-4 lg:px-24 py-2 flex items-center justify-between"
     >
       {/* LOGO LEFT */}
       <motion.div
@@ -35,10 +35,10 @@ export default function Navbar() {
         <Link href="/">
           <Image
             src={"/images/ynotnowLogo.png"}
-            width={100}
-            height={100}
+            width={64}
+            height={64}
             alt="logo"
-            className="w-28 lg:w-40"
+            className="w-28 lg:w-32"
           />
         </Link>
       </motion.div>
@@ -64,9 +64,9 @@ export default function Navbar() {
       </motion.div>
 
       {/* RIGHT ICONS + MENU */}
-      <div className="flex items-center gap-4 lg:gap-6 relative">
+      <div className="flex items-center gap-4 lg:gap-8 relative">
         <RiGeminiFill className="text-white text-3xl hidden md:flex" />
-        <MdOutlineShoppingBag className="text-white text-4xl hidden md:flex" />
+        <MdOutlineShoppingBag className="text-white hover:text-gray-200 hover:scale-95 transition-all duration-300 text-3xl hidden md:flex" />
 
         {/* MENU ICON */}
         <div

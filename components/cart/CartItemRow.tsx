@@ -10,6 +10,8 @@ interface CartItemRowProps {
   onToggle: () => void;
   onIncrease: () => void;
   onDecrease: () => void;
+  onRemove?: () => void;
+  isLoading?: boolean;
 }
 
 export default function CartItemRow({
@@ -17,6 +19,8 @@ export default function CartItemRow({
   onToggle,
   onIncrease,
   onDecrease,
+  onRemove,
+  isLoading = false,
 }: CartItemRowProps) {
   return (
     <div className="border rounded-xl flex gap-3 items-start">
@@ -46,12 +50,30 @@ export default function CartItemRow({
       </div>
 
       <div className="flex flex-col justify-center items-end gap-11">
-        <button className="text-gray-400 text-sm"><HiOutlineTrash className="text-lg" /></button>
+        <button
+          onClick={onRemove}
+          disabled={isLoading}
+          className="text-gray-400 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:text-red-500 transition-colors"
+        >
+          <HiOutlineTrash className="text-lg" />
+        </button>
 
         <div className="flex gap-2 bg-gray-100 items-end rounded-full px-3 py-1 text-sm">
-          <button onClick={onDecrease}>−</button>
+          <button
+            onClick={onDecrease}
+            disabled={isLoading || item.quantity <= 1}
+            className="disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            −
+          </button>
           <span>{item.quantity}</span>
-          <button onClick={onIncrease}>+</button>
+          <button
+            onClick={onIncrease}
+            disabled={isLoading}
+            className="disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            +
+          </button>
         </div>
       </div>
 </div>
