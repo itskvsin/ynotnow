@@ -12,9 +12,17 @@ interface CartSectionProps {
   items: CartItem[];
   summary: CartSummary;
   checkoutUrl?: string | null;
+  discountCodes?: Array<{ code: string; applicable: boolean }>;
+  onCartUpdate?: () => void;
 }
 
-export default function CartSection({ items: initialItems, summary, checkoutUrl }: CartSectionProps) {
+export default function CartSection({ 
+  items: initialItems, 
+  summary, 
+  checkoutUrl,
+  discountCodes = [],
+  onCartUpdate
+}: CartSectionProps) {
   const [cartItems, setCartItems] = useState(initialItems);
   const { refresh } = useCart();
   const { updateItem, isLoading: isUpdating } = useUpdateCartItem();
@@ -124,7 +132,19 @@ export default function CartSection({ items: initialItems, summary, checkoutUrl 
 
         {/* <div className="w-1/4"> */}
           {/* Summary */}
-          <OrderSummary summary={summary} checkoutUrl={checkoutUrl} />
+          <OrderSummary 
+            summary={summary} 
+            checkoutUrl={checkoutUrl}
+            discountCodes={discountCodes}
+            onDiscountCodeApplied={() => {
+              if (onCartUpdate) {
+                onCartUpdate();
+              } else {
+                // Fallback to event-based refresh
+                window.dispatchEvent(new Event("cart-updated"));
+              }
+            }}
+          />
         {/* </div> */}
       </div>
     </section>

@@ -25,6 +25,7 @@ export interface ShopifyProductVariant {
   title: string;
   price: ShopifyMoney;
   availableForSale: boolean;
+  quantityAvailable?: number;
   sku?: string;
   weight?: number;
   weightUnit?: string;

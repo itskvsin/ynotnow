@@ -8,7 +8,7 @@ import { useCart } from "@/hooks/useCart";
 import Link from "next/link";
 
 export default function CartPage() {
-  const { items, summary, isLoading, error, checkoutUrl } = useCart();
+  const { items, summary, isLoading, error, checkoutUrl, discountCodes, refresh } = useCart();
 
   if (isLoading) {
     return (
@@ -62,7 +62,13 @@ export default function CartPage() {
         <BreadCrumbNav />
       </div>
       {/* Cart Items + Order Summary */}
-      <CartSection items={items} summary={summary} checkoutUrl={checkoutUrl} />
+      <CartSection 
+        items={items} 
+        summary={summary} 
+        checkoutUrl={checkoutUrl}
+        discountCodes={discountCodes}
+        onCartUpdate={refresh}
+      />
 
       {/* Shipping Calculator */}
       <ShippingCalculator />

@@ -8,6 +8,8 @@ interface ProductDetailSectionProps {
   selectedColor?: string | null;
   onSizeChange?: (size: string) => void;
   onColorChange?: (color: string) => void;
+  hasSizeOption?: boolean;
+  hasColorOption?: boolean;
 }
 
 export default function ProductDetailSection({
@@ -16,6 +18,8 @@ export default function ProductDetailSection({
   selectedColor,
   onSizeChange,
   onColorChange,
+  hasSizeOption = true,
+  hasColorOption = true,
 }: ProductDetailSectionProps) {
   return (
     <section className="py-6 max-w-lg mx-auto lg:flex">
@@ -27,6 +31,8 @@ export default function ProductDetailSection({
           selectedColor={selectedColor}
           onSizeChange={onSizeChange}
           onColorChange={onColorChange}
+          hasSizeOption={hasSizeOption}
+          hasColorOption={hasColorOption}
         />
       </div>
     </section>

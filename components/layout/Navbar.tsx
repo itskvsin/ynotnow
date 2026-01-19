@@ -66,7 +66,9 @@ export default function Navbar() {
       {/* RIGHT ICONS + MENU */}
       <div className="flex items-center gap-4 lg:gap-8 relative">
         <RiGeminiFill className="text-white text-3xl hidden md:flex" />
-        <MdOutlineShoppingBag className="text-white hover:text-gray-200 hover:scale-95 transition-all duration-300 text-3xl hidden md:flex" />
+        <Link href="/cart">
+          <MdOutlineShoppingBag className="text-white hover:text-gray-200 hover:scale-95 transition-all duration-300 text-3xl hidden md:flex" />
+        </Link>
 
         {/* MENU ICON */}
         <div
@@ -86,9 +88,8 @@ export default function Navbar() {
           initial={{ opacity: 0, y: -20 }}
           animate={open ? { opacity: 1, y: -10 } : { opacity: 0, y: -10 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className={`${
-            open ? "block" : "hidden"
-          } absolute -right-25 top-20 pointer-events-none`}
+          className={`${open ? "block" : "hidden"
+            } absolute -right-25 top-20 pointer-events-none`}
         >
           <div className="pointer-events-auto bg-white text-black px-16 py-14 space-y-4">
             <Link

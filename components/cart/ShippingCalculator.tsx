@@ -7,16 +7,58 @@ import { PiPackage } from "react-icons/pi";
 export default function ShippingCalculator() {
   const [country, setCountry] = useState("India");
   const [state, setState] = useState("Maharashtra");
+  const [city, setCity] = useState("");
   const [zipCode, setZipCode] = useState("");
-  const [rate, setRate] = useState<ShippingRate | null>(null);
+  const [rates, setRates] = useState<ShippingRate[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleCalculate = () => {
-    // 🔁 Replace with backend API call later
-    setRate({
-      label: "Standard Shipping",
-      amount: 299,
-      currency: "INR",
-    });
+  const handleCalculate = async () => {
+    if (!country) {
+      setError("Please select a country");
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+    setRates([]);
+
+    try {
+      const response = await fetch("/api/cart/shipping", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          country,
+          state: state || undefined,
+          city: city || undefined,
+          zipCode: zipCode || undefined,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to calculate shipping");
+      }
+
+      if (data.rates && data.rates.length > 0) {
+        // Transform Shopify rates to our format
+        const transformedRates: ShippingRate[] = data.rates.map((rate: any) => ({
+          label: rate.title,
+          amount: parseFloat(rate.cost.amount),
+          currency: rate.cost.currencyCode,
+        }));
+        setRates(transformedRates);
+      } else {
+        setError("No shipping rates available for this address");
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to calculate shipping");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -55,6 +97,17 @@ export default function ShippingCalculator() {
               <option>Karnataka</option>
             </select>
           </div>
+          {/* City */}
+          <div className="mb-4 lg:w-1/3">
+            <label className="block text-lg mb-2 px-2">City</label>
+            <input
+              type="text"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              placeholder="Mumbai"
+              className="w-full rounded-full border px-4 py-4 text-md outline-none"
+            />
+          </div>
           {/* Zip Code */}
           <div className="mb-6 lg:w-1/3">
             <label className="block text-lg mb-2 px-2">Zip Code</label>
@@ -62,7 +115,7 @@ export default function ShippingCalculator() {
               type="text"
               value={zipCode}
               onChange={(e) => setZipCode(e.target.value)}
-              placeholder="100-0012"
+              placeholder="400001"
               className="w-full rounded-full border px-4 py-4 text-md outline-none"
             />
           </div>
@@ -72,23 +125,39 @@ export default function ShippingCalculator() {
           {/* Calculate */}
           <button
             onClick={handleCalculate}
-            className="w-full lg:w-1/12 bg-black text-white py-5 lg:py-6 rounded-full text-sm"
+            disabled={isLoading}
+            className="w-full lg:w-1/12 bg-black text-white py-5 lg:py-6 rounded-full text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Calculate
+            {isLoading ? "Calculating..." : "Calculate"}
           </button>
 
-          {/* Result */}
-          {rate && (
-            <div className="bg-black text-white rounded-xl p-6 mt-6 text-md text-center">
-              <p className="mb-6">
-                There is one shipping rate for your address:
+          {/* Error */}
+          {error && (
+            <div className="bg-red-50 text-red-600 rounded-xl p-4 mt-6 text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Results */}
+          {rates.length > 0 && (
+            <div className="bg-black text-white rounded-xl p-6 mt-6">
+              <p className="mb-4 text-md text-center">
+                {rates.length === 1 
+                  ? "Available shipping rate:" 
+                  : `Available shipping rates (${rates.length}):`}
               </p>
-              <p className="font-normal">
-                {rate.label}:{" "}
-                <span className="font-bold text-lg">
-                  {rate.currency} {rate.amount.toFixed(2)}
-                </span>
-              </p>
+              <div className="space-y-3">
+                {rates.map((rate, index) => (
+                  <div key={index} className="text-center">
+                    <p className="font-normal">
+                      {rate.label}:{" "}
+                      <span className="font-bold text-lg">
+                        {rate.currency} {rate.amount.toFixed(2)}
+                      </span>
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

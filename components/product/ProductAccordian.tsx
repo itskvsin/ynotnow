@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { AccordionItem } from "@/types/productMeta";
 
 interface ProductAccordionProps {
@@ -21,14 +22,29 @@ export default function ProductAccordion({ items }: ProductAccordionProps) {
             className="w-full flex justify-between items-center py-4 text-sm"
           >
             <span className="flex items-center gap-2 text-lg">{item.icon}{item.title}</span>
-            <span>{openId === item.id ? "−" : "+"}</span>
+            <motion.span
+              animate={{ rotate: openId === item.id ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {openId === item.id ? "−" : "+"}
+            </motion.span>
           </button>
 
-          {openId === item.id && (
-            <p className="text-sm text-gray-600 pb-4">
-              {item.content}
-            </p>
-          )}
+          <AnimatePresence>
+            {openId === item.id && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                style={{ overflow: "hidden" }}
+              >
+                <p className="text-sm text-gray-600 pb-4">
+                  {item.content}
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       ))}
     </div>

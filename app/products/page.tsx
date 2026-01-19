@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { RiFilter3Fill } from "react-icons/ri";
 import { BsFillGridFill } from "react-icons/bs";
 import { TfiLayoutGrid3Alt } from "react-icons/tfi";
 import { IoClose } from "react-icons/io5";
+import { FiSearch } from "react-icons/fi";
 import ProductShowcaseClone from "@/components/ProductShowcaseClone";
 
 const Hero = () => {
@@ -22,9 +24,10 @@ const Hero = () => {
 type SortOption = "default" | "price-low" | "price-high" | "name-asc" | "name-desc";
 
 const page = () => {
-  const [gridView, setGridView] = useState<"2" | "4">("4");
+  const [gridView, setGridView] = useState<"2" | "3">("3");
   const [showFilter, setShowFilter] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>("default");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSort = (option: SortOption) => {
     setSortBy(option);
@@ -36,48 +39,73 @@ const page = () => {
       <div className="relative">
         <Hero />
       </div>
-      <div className="h-18 border-b w-full flex justify-between px-4 lg:items-center lg:justify-end lg:gap-10">
-        <div className="leftSection flex gap-4 items-center">
-          <button
-            onClick={() => setGridView("2")}
-            className={`p-2 transition-colors ${
-              gridView === "2" ? "text-black" : "text-black/50"
-            }`}
-            aria-label="2 column grid view"
-          >
-            <BsFillGridFill className="text-2xl" />
-          </button>
-          <button
-            onClick={() => setGridView("4")}
-            className={`p-2 transition-colors ${
-              gridView === "4" ? "text-black" : "text-black/50"
-            }`}
-            aria-label="4 column grid view"
-          >
-            <TfiLayoutGrid3Alt className="text-xl" />
-          </button>
+      <div className="h-18 border-b w-full flex flex-col lg:flex-row justify-between px-4 lg:items-center lg:justify-between lg:gap-10 gap-4 py-4">
+        {/* Search Bar */}
+        <div className="flex-1 max-w-md">
+          <div className="relative">
+            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search products..."
+              className="w-full pl-10 pr-4 py-2 border rounded-full text-sm outline-none focus:ring-2 focus:ring-black"
+            />
+          </div>
         </div>
-        <div className="rightSection flex items-center text-xl gap-2">
-          <button
-            onClick={() => setShowFilter(!showFilter)}
-            className="flex items-center gap-2 hover:opacity-70 transition-opacity"
-          >
-            <RiFilter3Fill />
-            <p>Filter & Sort</p>
-          </button>
+
+        <div className="flex items-center gap-4">
+          <div className="leftSection flex gap-4 items-center">
+            <button
+              onClick={() => setGridView("2")}
+              className={`p-2 transition-all duration-300 ${
+                gridView === "2" ? "text-black scale-110" : "text-black/50"
+              }`}
+              aria-label="2 column grid view"
+            >
+              <BsFillGridFill className="text-2xl" />
+            </button>
+            <button
+              onClick={() => setGridView("3")}
+              className={`p-2 transition-all duration-300 ${
+                gridView === "3" ? "text-black scale-110" : "text-black/50"
+              }`}
+              aria-label="3 column grid view"
+            >
+              <TfiLayoutGrid3Alt className="text-xl" />
+            </button>
+          </div>
+          <div className="rightSection flex items-center text-xl gap-2">
+            <button
+              onClick={() => setShowFilter(!showFilter)}
+              className="flex items-center gap-2 hover:opacity-70 transition-opacity"
+            >
+              <RiFilter3Fill />
+              <p>Filter & Sort</p>
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Filter & Sort Modal */}
-      {showFilter && (
-        <div
-          className="fixed inset-0 bg-black/50 z-50 flex items-start justify-end"
-          onClick={() => setShowFilter(false)}
-        >
-          <div
-            className="bg-white w-full max-w-md h-full shadow-xl overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
+      <AnimatePresence>
+        {showFilter && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black/50 z-50 flex items-start justify-end"
+            onClick={() => setShowFilter(false)}
           >
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="bg-white w-full max-w-md h-full shadow-xl overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
             <div className="p-6 border-b flex justify-between items-center">
               <h2 className="text-xl font-bold">Filter & Sort</h2>
               <button
@@ -145,13 +173,19 @@ const page = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        </motion.div>
+        )}
+      </AnimatePresence>
 
-      <div>
-        <ProductShowcaseClone gridCols={gridView} sortBy={sortBy} />
-      </div>
+      <motion.div
+        key={gridView}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        <ProductShowcaseClone gridCols={gridView} sortBy={sortBy} searchQuery={searchQuery} />
+      </motion.div>
     </section>
   );
 };

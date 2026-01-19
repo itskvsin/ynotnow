@@ -10,6 +10,7 @@ interface UseCartReturn {
   summary: CartSummary;
   cartId: string | null;
   checkoutUrl: string | null;
+  discountCodes?: Array<{ code: string; applicable: boolean }>;
   isLoading: boolean;
   error: string | null;
   refresh: () => Promise<void>;
@@ -81,6 +82,7 @@ export function useCart(): UseCartReturn {
     summary,
     cartId,
     checkoutUrl,
+    discountCodes: cart?.discountCodes || [],
     isLoading,
     error,
     refresh: fetchCart,

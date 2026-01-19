@@ -11,6 +11,8 @@ interface ProductInfoProps {
   onColorChange?: (color: string) => void;
   selectedSize?: string | null;
   selectedColor?: string | null;
+  hasSizeOption?: boolean;
+  hasColorOption?: boolean;
 }
 
 export default function ProductInfo({
@@ -19,6 +21,8 @@ export default function ProductInfo({
   onColorChange,
   selectedSize: controlledSize,
   selectedColor: controlledColor,
+  hasSizeOption = true,
+  hasColorOption = true,
 }: ProductInfoProps) {
   const [internalSize, setInternalSize] = useState<string | null>(null);
   const [internalColor, setInternalColor] = useState<string | null>(null);
@@ -52,21 +56,25 @@ export default function ProductInfo({
         ₹{product.price.toLocaleString()}
       </p>
 
-      <div className="mt-4">
-        <SizeSelector
-          sizes={product.sizes}
-          selectedSize={selectedSize}
-          onSizeChange={handleSizeChange}
-        />
-      </div>
+      {hasSizeOption && product.sizes && product.sizes.length > 0 && (
+        <div className="mt-4">
+          <SizeSelector
+            sizes={product.sizes}
+            selectedSize={selectedSize}
+            onSizeChange={handleSizeChange}
+          />
+        </div>
+      )}
 
-      <div className="mt-4">
-        <ColorSelector
-          colors={["#000000", "#FFFFFF", "#D6C5B8", "#0A1A4F"]}
-          selectedColor={selectedColor ?? undefined}
-          onChange={handleColorChange}
-        />
-      </div>
+      {hasColorOption && product.colors && product.colors.length > 0 && (
+        <div className="mt-4">
+          <ColorSelector
+            colors={product.colors}
+            selectedColor={selectedColor ?? undefined}
+            onChange={handleColorChange}
+          />
+        </div>
+      )}
 
       {/* <div className="mt-4 text-sm text-green-600">
         {product.inStock ? "✓ In stock" : "Out of stock"}
