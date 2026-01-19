@@ -16,16 +16,16 @@ const CART_ID_EXPIRY_DAYS = 30;
 /**
  * Get cart ID from server-side cookies
  */
-function getCartIdFromCookies(): string | null {
-  const cookieStore = cookies();
+async function getCartIdFromCookies(): Promise<string | null> {
+  const cookieStore = await cookies();
   return cookieStore.get(CART_ID_COOKIE)?.value || null;
 }
 
 /**
  * Set cart ID in server-side cookies
  */
-function setCartIdInCookies(cartId: string): void {
-  const cookieStore = cookies();
+async function setCartIdInCookies(cartId: string): Promise<void> {
+  const cookieStore = await cookies();
   const expiryDate = new Date();
   expiryDate.setDate(expiryDate.getDate() + CART_ID_EXPIRY_DAYS);
 
@@ -40,15 +40,15 @@ function setCartIdInCookies(cartId: string): void {
 /**
  * Clear cart ID from server-side cookies
  */
-function clearCartIdFromCookies(): void {
-  const cookieStore = cookies();
+async function clearCartIdFromCookies(): Promise<void> {
+  const cookieStore = await cookies();
   cookieStore.delete(CART_ID_COOKIE);
 }
 
 // GET - Fetch cart
 export async function GET() {
   try {
-    const cartId = getCartIdFromCookies();
+    const cartId = await getCartIdFromCookies();
 
     if (!cartId) {
       return NextResponse.json({ cart: null });
@@ -58,7 +58,7 @@ export async function GET() {
 
     if (!cart) {
       // Cart doesn't exist, clear the cookie
-      clearCartIdFromCookies();
+      await clearCartIdFromCookies();
       return NextResponse.json({ cart: null });
     }
 
@@ -80,18 +80,18 @@ export async function POST(request: NextRequest) {
 
     if (action === "create") {
       const cartId = await createCart();
-      setCartIdInCookies(cartId);
+      await setCartIdInCookies(cartId);
       const cart = await getCart(cartId);
       return NextResponse.json({ cart });
     }
 
     if (action === "add") {
-      const cartId = getCartIdFromCookies();
+      const cartId = await getCartIdFromCookies();
 
       if (!cartId) {
         // Create new cart if none exists
         const newCartId = await createCart();
-        setCartIdInCookies(newCartId);
+        await setCartIdInCookies(newCartId);
         const cart = await addToCart(newCartId, lines as CartLineInput[]);
         return NextResponse.json({ cart });
       }
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
 // PUT - Update cart items
 export async function PUT(request: NextRequest) {
   try {
-    const cartId = getCartIdFromCookies();
+    const cartId = await getCartIdFromCookies();
 
     if (!cartId) {
       return NextResponse.json({ error: "No cart found" }, { status: 404 });
@@ -136,7 +136,7 @@ export async function PUT(request: NextRequest) {
 // DELETE - Remove cart items
 export async function DELETE(request: NextRequest) {
   try {
-    const cartId = getCartIdFromCookies();
+    const cartId = await getCartIdFromCookies();
 
     if (!cartId) {
       return NextResponse.json({ error: "No cart found" }, { status: 404 });
@@ -157,7 +157,7 @@ export async function DELETE(request: NextRequest) {
 
     // If cart is empty, clear the cookie
     if (cart.totalQuantity === 0) {
-      clearCartIdFromCookies();
+      await clearCartIdFromCookies();
     }
 
     return NextResponse.json({ cart });
