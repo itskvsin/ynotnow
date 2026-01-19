@@ -56,10 +56,10 @@ export default function Navbar() {
       >
         <Image
           src={"/images/logo.png"}
-          width={100}
-          height={100}
+          width={64}
+          height={64}
           alt="logo"
-          className="w-16 lg:w-24 hidden md:flex"
+          className="w-12 hidden md:flex"
         />
       </motion.div>
 

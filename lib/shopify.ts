@@ -9,7 +9,7 @@ import type {
 // This only runs on the server, so it's safe
 const shopifyDomain = process.env.SHOPIFY_STORE_DOMAIN;
 const shopifyToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
-const apiVersion = "2026-01";
+const apiVersion = "2025-01";
 
 if (!shopifyDomain || !shopifyToken) {
   throw new Error(
@@ -341,21 +341,22 @@ export const CART_GET_QUERY = `
           currencyCode
         }
       }
-      deliveryGroups {
-        deliveryAddress {
-          address1
-          address2
-          city
-          province
-          country
-          zip
-        }
-        deliveryOptions {
-          handle
-          title
-          cost {
-            amount
-            currencyCode
+      deliveryGroups(first: 1) {
+        edges {
+          node {
+            deliveryAddress {
+              address1
+              address2
+              city
+              province
+              country
+              zip
+            }
+            deliveryOptions {
+              handle
+              title
+              code
+            }
           }
         }
       }
@@ -598,24 +599,25 @@ export interface ShopifyCart {
       currencyCode: string;
     };
   };
-  deliveryGroups?: Array<{
-    deliveryAddress: {
-      address1: string | null;
-      address2: string | null;
-      city: string | null;
-      province: string | null;
-      country: string | null;
-      zip: string | null;
-    };
-    deliveryOptions: Array<{
-      handle: string;
-      title: string;
-      cost: {
-        amount: string;
-        currencyCode: string;
+  deliveryGroups?: {
+    edges: Array<{
+      node: {
+        deliveryAddress: {
+          address1: string | null;
+          address2: string | null;
+          city: string | null;
+          province: string | null;
+          country: string | null;
+          zip: string | null;
+        };
+        deliveryOptions: Array<{
+          handle: string;
+          title: string;
+          code?: string | null;
+        }>;
       };
     }>;
-  }>;
+  };
 }
 
 export interface CartCreateResponse {
@@ -1013,21 +1015,22 @@ export const CART_BUYER_IDENTITY_UPDATE_MUTATION = `
     cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
       cart {
         id
-        deliveryGroups {
-          deliveryAddress {
-            address1
-            address2
-            city
-            province
-            country
-            zip
-          }
-          deliveryOptions {
-            handle
-            title
-            cost {
-              amount
-              currencyCode
+        deliveryGroups(first: 1) {
+          edges {
+            node {
+              deliveryAddress {
+                address1
+                address2
+                city
+                province
+                country
+                zip
+              }
+              deliveryOptions {
+                handle
+                title
+                code
+              }
             }
           }
         }
@@ -1044,24 +1047,25 @@ export interface CartBuyerIdentityUpdateResponse {
   cartBuyerIdentityUpdate: {
     cart: {
       id: string;
-      deliveryGroups: Array<{
-        deliveryAddress: {
-          address1: string | null;
-          address2: string | null;
-          city: string | null;
-          province: string | null;
-          country: string | null;
-          zip: string | null;
-        };
-        deliveryOptions: Array<{
-          handle: string;
-          title: string;
-          cost: {
-            amount: string;
-            currencyCode: string;
+      deliveryGroups: {
+        edges: Array<{
+          node: {
+            deliveryAddress: {
+              address1: string | null;
+              address2: string | null;
+              city: string | null;
+              province: string | null;
+              country: string | null;
+              zip: string | null;
+            };
+            deliveryOptions: Array<{
+              handle: string;
+              title: string;
+              code?: string | null;
+            }>;
           };
         }>;
-      }>;
+      };
     } | null;
     userErrors: Array<{
       field: string[];
@@ -1082,10 +1086,7 @@ export interface ShippingAddress {
 export interface ShippingRate {
   handle: string;
   title: string;
-  cost: {
-    amount: string;
-    currencyCode: string;
-  };
+  code?: string | null;
 }
 
 /**
@@ -1158,11 +1159,12 @@ export async function getShippingRates(
 
     const cart = cartResponse.data.cart;
 
-    if (!cart.deliveryGroups || cart.deliveryGroups.length === 0) {
+    if (!cart.deliveryGroups || !cart.deliveryGroups.edges || cart.deliveryGroups.edges.length === 0) {
       return [];
     }
 
-    return cart.deliveryGroups[0].deliveryOptions || [];
+    const firstDeliveryGroup = cart.deliveryGroups.edges[0]?.node;
+    return firstDeliveryGroup?.deliveryOptions || [];
   } catch (error) {
     console.error("Error getting shipping rates:", error);
     throw error;
