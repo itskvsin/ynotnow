@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export interface RecentlyViewedProduct {
     id: string;
@@ -30,30 +30,32 @@ export function useRecentlyViewed() {
         }
     }, []);
 
-    // Add a product to recently viewed
-    const addProduct = (product: Omit<RecentlyViewedProduct, "viewedAt">) => {
+    // Add a product to recently viewed - wrapped in useCallback to prevent infinite loops
+    const addProduct = useCallback((product: Omit<RecentlyViewedProduct, "viewedAt">) => {
         try {
-            const newProduct: RecentlyViewedProduct = {
-                ...product,
-                viewedAt: Date.now(),
-            };
+            setProducts((currentProducts) => {
+                const newProduct: RecentlyViewedProduct = {
+                    ...product,
+                    viewedAt: Date.now(),
+                };
 
-            // Remove duplicate if exists, then add to front
-            const filtered = products.filter((p) => p.id !== product.id);
-            const updated = [newProduct, ...filtered].slice(0, MAX_ITEMS);
+                // Remove duplicate if exists, then add to front
+                const filtered = currentProducts.filter((p) => p.id !== product.id);
+                const updated = [newProduct, ...filtered].slice(0, MAX_ITEMS);
 
-            setProducts(updated);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+                return updated;
+            });
         } catch (error) {
             console.error("Error adding to recently viewed:", error);
         }
-    };
+    }, []);
 
     // Clear all recently viewed
-    const clearAll = () => {
+    const clearAll = useCallback(() => {
         setProducts([]);
         localStorage.removeItem(STORAGE_KEY);
-    };
+    }, []);
 
     return {
         products,

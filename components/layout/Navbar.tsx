@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { RiGeminiFill } from "react-icons/ri";
@@ -8,16 +6,35 @@ import { FiMenu } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const check = () => setIsDesktop(window.innerWidth > 1024);
     check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Check if user is logged in by checking for auth cookie
+  useEffect(() => {
+    const checkAuth = () => {
+      const cookies = document.cookie.split(';');
+      const hasAuthCookie = cookies.some(cookie =>
+        cookie.trim().startsWith('shopify_customer_token=')
+      );
+      setIsLoggedIn(hasAuthCookie);
+    };
+
+    checkAuth();
+    // Re-check on focus in case user logged in/out in another tab
+    window.addEventListener('focus', checkAuth);
+    return () => window.removeEventListener('focus', checkAuth);
   }, []);
 
   return (
@@ -127,19 +144,21 @@ export default function Navbar() {
             >
               About
             </Link>
-            <Link
-              href="/account"
-              className="block text-xl uppercase hover:text-gray-600 transition-colors"
-              onClick={() => setOpen(false)}
-            >
-              Account
-            </Link>
-
-            <Link href="/login" onClick={() => setOpen(false)}>
-              <button className="bg-black text-white text-xl px-12 py-3 mt-4 w-full hover:bg-gray-800 transition-colors">
-                Login
-              </button>
-            </Link>
+            {isLoggedIn ? (
+              <Link
+                href="/account"
+                className="block text-xl uppercase hover:text-gray-600 transition-colors"
+                onClick={() => setOpen(false)}
+              >
+                Account
+              </Link>
+            ) : (
+              <Link href="/login" onClick={() => setOpen(false)}>
+                <button className="bg-black text-white text-xl px-12 py-3 mt-4 w-full hover:bg-gray-800 transition-colors cursor-pointer">
+                  Login
+                </button>
+              </Link>
+            )}
           </div>
         </motion.div>
       </div>
