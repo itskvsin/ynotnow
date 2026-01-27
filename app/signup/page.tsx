@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { registerCustomerAction } from "@/lib/actions/customer";
+import { validateEmail, validatePassword, validatePhone } from "@/lib/utils/validation";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -13,21 +14,52 @@ export default function SignupPage() {
     firstName: "",
     lastName: "",
     phone: "",
+    countryCode: "+91",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<{
+    email?: string;
+    password?: string;
+    phone?: string;
+  }>({});
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+    // Clear field error when user types
+    if (fieldErrors[name as keyof typeof fieldErrors]) {
+      setFieldErrors({
+        ...fieldErrors,
+        [name]: undefined,
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     setError(null);
+    setFieldErrors({});
+
+    // Validate all fields
+    const emailValidation = validateEmail(formData.email);
+    const passwordValidation = validatePassword(formData.password);
+    const phoneValidation = validatePhone(formData.phone);
+
+    const errors: typeof fieldErrors = {};
+    if (!emailValidation.isValid) errors.email = emailValidation.error;
+    if (!passwordValidation.isValid) errors.password = passwordValidation.error;
+    if (!phoneValidation.isValid) errors.phone = phoneValidation.error;
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+
+    setIsLoading(true);
 
     try {
       const { customer, error: actionError } = await registerCustomerAction({
@@ -35,7 +67,7 @@ export default function SignupPage() {
         password: formData.password,
         firstName: formData.firstName || undefined,
         lastName: formData.lastName || undefined,
-        phone: formData.phone || undefined,
+        phone: formData.phone ? `${formData.countryCode}${formData.phone}` : undefined,
       });
 
       if (actionError || !customer) {
@@ -108,25 +140,57 @@ export default function SignupPage() {
               type="email"
               value={formData.email}
               onChange={handleChange}
-              required
-              className="w-full bg-gray-100 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-black"
+              className={`w-full bg-gray-100 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 ${fieldErrors.email ? "ring-2 ring-red-500" : "focus:ring-black"
+                }`}
               placeholder="your@email.com"
             />
+            {fieldErrors.email && (
+              <p className="text-red-500 text-xs mt-1">{fieldErrors.email}</p>
+            )}
           </div>
 
           <div>
             <label htmlFor="phone" className="block text-sm font-medium mb-2">
               Phone
             </label>
-            <input
-              id="phone"
-              name="phone"
-              type="tel"
-              value={formData.phone}
-              onChange={handleChange}
-              className="w-full bg-gray-100 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-black"
-              placeholder="+1 234 567 8900"
-            />
+            <div className="flex gap-2">
+              <select
+                name="countryCode"
+                value={formData.countryCode}
+                onChange={handleChange}
+                className="bg-gray-100 rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-black"
+              >
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+44">🇬🇧 +44</option>
+                <option value="+91">🇮🇳 +91</option>
+                <option value="+61">🇦🇺 +61</option>
+                <option value="+81">🇯🇵 +81</option>
+                <option value="+86">🇨🇳 +86</option>
+                <option value="+33">🇫🇷 +33</option>
+                <option value="+49">🇩🇪 +49</option>
+                <option value="+39">🇮🇹 +39</option>
+                <option value="+34">🇪🇸 +34</option>
+                <option value="+7">🇷🇺 +7</option>
+                <option value="+55">🇧🇷 +55</option>
+                <option value="+27">🇿🇦 +27</option>
+                <option value="+82">🇰🇷 +82</option>
+                <option value="+65">🇸🇬 +65</option>
+                <option value="+971">🇦🇪 +971</option>
+              </select>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={handleChange}
+                className={`flex-1 bg-gray-100 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 ${fieldErrors.phone ? "ring-2 ring-red-500" : "focus:ring-black"
+                  }`}
+                placeholder="234 567 8900"
+              />
+            </div>
+            {fieldErrors.phone && (
+              <p className="text-red-500 text-xs mt-1">{fieldErrors.phone}</p>
+            )}
           </div>
 
           <div>
@@ -139,18 +203,21 @@ export default function SignupPage() {
               type="password"
               value={formData.password}
               onChange={handleChange}
-              required
-              minLength={6}
-              className="w-full bg-gray-100 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-black"
+              className={`w-full bg-gray-100 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 ${fieldErrors.password ? "ring-2 ring-red-500" : "focus:ring-black"
+                }`}
               placeholder="••••••••"
             />
-            <p className="text-xs text-gray-500 mt-1">Minimum 6 characters</p>
+            {fieldErrors.password ? (
+              <p className="text-red-500 text-xs mt-1">{fieldErrors.password}</p>
+            ) : (
+              <p className="text-xs text-gray-500 mt-1">Minimum 6 characters</p>
+            )}
           </div>
 
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-black text-white rounded-full py-4 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-black text-white rounded-full py-4 text-sm font-medium cursor-pointer hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? "Creating account..." : "Sign Up"}
           </button>

@@ -86,31 +86,57 @@ export default function Navbar() {
         {/* MENU DROPDOWN */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
-          animate={open ? { opacity: 1, y: -10 } : { opacity: 0, y: -10 }}
+          animate={open ? { opacity: 1, y: -22 } : { opacity: 0, y: -20 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className={`${open ? "block" : "hidden"
             } absolute -right-25 top-20 pointer-events-none`}
         >
-          <div className="pointer-events-auto bg-white text-black px-16 py-14 space-y-4">
+          <div className="pointer-events-auto bg-white text-black px-16 py-14 space-y-4 shadow-xl">
             <Link
-              href="/allProducts"
-              className="text-xl uppercase cursor-pointer"
+              href="/products"
+              className="block text-xl uppercase hover:text-gray-600 transition-colors"
+              onClick={() => setOpen(false)}
             >
-              shop all
+              Shop All
             </Link>
             <Link
-              href="/account/personal-information"
-              className="text-xl uppercase cursor-pointer"
+              href="/products"
+              className="block text-xl uppercase hover:text-gray-600 transition-colors"
+              onClick={() => setOpen(false)}
             >
-              hoodies
+              Hoodies
             </Link>
-            <p className="text-xl uppercase cursor-pointer">t-shirt</p>
-            <p className="text-xl uppercase cursor-pointer">accessories</p>
-            <p className="text-xl uppercase cursor-pointer">about</p>
-            <p className="text-xl uppercase cursor-pointer">account</p>
+            <Link
+              href="/products"
+              className="block text-xl uppercase hover:text-gray-600 transition-colors"
+              onClick={() => setOpen(false)}
+            >
+              T-Shirts
+            </Link>
+            <Link
+              href="/products"
+              className="block text-xl uppercase hover:text-gray-600 transition-colors"
+              onClick={() => setOpen(false)}
+            >
+              Accessories
+            </Link>
+            <Link
+              href="/about"
+              className="block text-xl uppercase hover:text-gray-600 transition-colors"
+              onClick={() => setOpen(false)}
+            >
+              About
+            </Link>
+            <Link
+              href="/account"
+              className="block text-xl uppercase hover:text-gray-600 transition-colors"
+              onClick={() => setOpen(false)}
+            >
+              Account
+            </Link>
 
-            <Link href="#">
-              <button className="bg-black text-white text-xl px-12 py-3 mt-4 w-full">
+            <Link href="/login" onClick={() => setOpen(false)}>
+              <button className="bg-black text-white text-xl px-12 py-3 mt-4 w-full hover:bg-gray-800 transition-colors">
                 Login
               </button>
             </Link>

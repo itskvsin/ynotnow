@@ -118,6 +118,10 @@ export const CUSTOMER_ORDERS_QUERY = `
                   variant {
                     id
                     title
+                    price {
+                      amount
+                      currencyCode
+                    }
                     image {
                       url
                       altText
@@ -125,10 +129,6 @@ export const CUSTOMER_ORDERS_QUERY = `
                     product {
                       handle
                     }
-                  }
-                  originalUnitPrice {
-                    amount
-                    currencyCode
                   }
                 }
               }
@@ -140,11 +140,6 @@ export const CUSTOMER_ORDERS_QUERY = `
               province
               country
               zip
-            }
-            trackingInformation {
-              number
-              url
-              company
             }
           }
         }
@@ -333,7 +328,7 @@ export async function getCustomer(
       firstName: customer.firstName || undefined,
       lastName: customer.lastName || undefined,
       phone: customer.phone || undefined,
-      addresses: customer.addresses?.edges.map(( edge: { node: CustomerAddress }) => edge.node) || [],
+      addresses: customer.addresses?.edges.map((edge: { node: CustomerAddress }) => edge.node) || [],
     };
   } catch (error) {
     console.error("Error fetching customer:", error);
@@ -411,6 +406,63 @@ export async function getCustomerOrders(
     return customer.orders.edges.map((edge: { node: CustomerOrder }) => edge.node);
   } catch (error) {
     console.error("Error fetching customer orders:", error);
+    throw error;
+  }
+}
+
+
+export const CUSTOMER_RECOVER_MUTATION = `
+  mutation customerRecover($email: String!) {
+    customerRecover(email: $email) {
+      customerUserErrors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+/**
+ * Sends a password recovery email
+ */
+export async function recoverCustomer(email: string): Promise<void> {
+  try {
+    const response = await shopifyClient.request(CUSTOMER_RECOVER_MUTATION, {
+      variables: {
+        email,
+      },
+    }) as any;
+
+    if (response.errors) {
+      throw new Error(`Shopify API errors: ${JSON.stringify(response.errors)}`);
+    }
+
+    const { customerUserErrors } = response.data.customerRecover;
+
+    if (customerUserErrors && customerUserErrors.length > 0) {
+      throw new Error(
+        `Recovery errors: ${customerUserErrors.map((e: { field: string[]; message: string }) => e.message).join(", ")}`
+      );
+    }
+  } catch (error) {
+    console.error("Error sending recovery email:", error);
+    throw error;
+  }
+}
+
+/**
+ * Get a single order by name (order number)
+ */
+export async function getCustomerOrderByName(
+  customerAccessToken: string,
+  orderName: string
+): Promise<any> {
+  try {
+    const orders = await getCustomerOrders(customerAccessToken, 100);
+    const order = orders.find((o: any) => o.name === orderName);
+    return order || null;
+  } catch (error) {
+    console.error("Error fetching order:", error);
     throw error;
   }
 }

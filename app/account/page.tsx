@@ -137,7 +137,7 @@ function Profile({ customer, onUpdate }: { customer: Customer | null; onUpdate: 
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="bg-black text-white px-10 py-3 rounded-full text-sm font-medium cursor-pointer disabled:opacity-50"
+            className="bg-black text-white px-10 py-3 rounded-full text-sm font-medium cursor-pointer hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSaving ? "Saving..." : "Save Edits"}
           </button>
@@ -226,23 +226,21 @@ function OrderCard({ order }: { order: CustomerOrder }) {
               order.fulfillmentStatus === "FULFILLED"
                 ? "text-green-600"
                 : order.fulfillmentStatus === "PARTIALLY_FULFILLED"
-                ? "text-yellow-600"
-                : "text-gray-600"
+                  ? "text-yellow-600"
+                  : "text-gray-600"
             }
           >
             {order.fulfillmentStatus.replace("_", " ")}
           </span>
         </div>
 
-        {/* Repeat Button */}
+        {/* View Details Button */}
         <div className="flex justify-end">
-          {productHandle && (
-            <Link href={`/products/${productHandle}`}>
-              <button className="bg-black text-white text-xs px-6 py-2 cursor-pointer rounded-full">
-                View
-              </button>
-            </Link>
-          )}
+          <Link href={`/account/orders/${encodeURIComponent(order.name)}`}>
+            <button className="bg-black text-white text-xs px-6 py-2 cursor-pointer rounded-full hover:bg-gray-800">
+              View Details
+            </button>
+          </Link>
         </div>
       </div>
     </div>
@@ -313,7 +311,7 @@ function Tracking() {
         <button
           onClick={handleTrack}
           disabled={isLoading}
-          className="lg:w-2/12 bg-black text-white py-3 px-6 rounded-full text-sm font-medium disabled:opacity-50"
+          className="lg:w-2/12 bg-black text-white py-3 px-6 rounded-full text-sm font-medium cursor-pointer hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? "Tracking..." : "Track"}
         </button>
@@ -448,7 +446,7 @@ const page = () => {
           <p className="text-lg mb-4">Please log in to view your account</p>
           <Link
             href="/login"
-            className="bg-black text-white px-8 py-3 rounded-full inline-block"
+            className="bg-black text-white px-8 py-3 rounded-full inline-block hover:bg-gray-800 transition-colors cursor-pointer"
           >
             Login
           </Link>
@@ -465,7 +463,7 @@ const page = () => {
         <AccountBreadcrumb activeTab={activeTab} />
         <button
           onClick={handleLogout}
-          className="text-sm text-gray-600 hover:text-black underline"
+          className="text-sm text-gray-600 hover:text-black underline cursor-pointer transition-colors"
         >
           Logout
         </button>
@@ -481,11 +479,10 @@ const page = () => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`pb-3 flex items-center gap-2 text-sm cursor-pointer ${
-              activeTab === tab.id
-                ? "border-b-2 border-black font-medium"
-                : "text-gray-500"
-            }`}
+            className={`pb-3 flex items-center gap-2 text-sm cursor-pointer transition-colors ${activeTab === tab.id
+              ? "border-b-2 border-black font-medium"
+              : "text-gray-500 hover:text-gray-800"
+              }`}
           >
             {tab.icon} {tab.label}
           </button>
@@ -503,19 +500,20 @@ const page = () => {
       <div className="md:flex md:gap-10 md:px-6 md:mt-6">
         {/* Sidebar */}
         <div className="hidden md:block md:w-72">
-          <div className="bg-white rounded-2xl border shadow-sm py-2 px-5 font-Geist">
+          <div className="bg-white rounded-2xl border shadow-sm py-2 px-3 font-Geist sticky top-24">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center gap-3 px-2 py-3 m-2 border-b md:text-lg rounded-lg transition-none duration-200 ${
-                  activeTab === tab.id
-                    ? "bg-black text-white scale-90"
-                    : "hover:bg-gray-100"
-                }`}
+                className={`w-full flex items-center gap-3 px-4 py-3 my-1 md:text-base rounded-lg cursor-pointer transition-all duration-300 ease-in-out ${activeTab === tab.id
+                  ? "bg-black text-white shadow-md transform scale-[0.98]"
+                  : "hover:bg-gray-100 hover:translate-x-1"
+                  }`}
               >
-                {tab.icon}
-                {tab.label}
+                <span className={`transition-transform duration-300 ${activeTab === tab.id ? "scale-110" : ""}`}>
+                  {tab.icon}
+                </span>
+                <span className="font-medium">{tab.label}</span>
               </button>
             ))}
           </div>

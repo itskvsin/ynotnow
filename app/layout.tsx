@@ -8,6 +8,7 @@ import FeaturesGrid from "@/components/commonDetail/FeaturesGrid";
 import About from "@/components/commonDetail/About";
 import LastBg from "@/components/commonDetail/LastBg";
 import { CommerceProviderWrapper } from "@/components/providers/CommerceProviderWrapper";
+import { Toaster } from "@/components/ui/Toaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,6 +47,7 @@ export default function RootLayout({
           <About />
           <LastBg />
           <Footer />
+          <Toaster />
         </CommerceProviderWrapper>
       </body>
     </html>

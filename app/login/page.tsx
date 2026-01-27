@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { loginCustomerAction } from "@/lib/actions/customer";
+import { validateEmail, validatePassword } from "@/lib/utils/validation";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -11,11 +12,30 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     setError(null);
+    setEmailError(null);
+    setPasswordError(null);
+
+    // Validate fields
+    const emailValidation = validateEmail(email);
+    const passwordValidation = validatePassword(password);
+
+    if (!emailValidation.isValid) {
+      setEmailError(emailValidation.error || null);
+      return;
+    }
+
+    if (!passwordValidation.isValid) {
+      setPasswordError(passwordValidation.error || null);
+      return;
+    }
+
+    setIsLoading(true);
 
     try {
       const { customer, error: actionError } = await loginCustomerAction(email, password);
@@ -58,11 +78,17 @@ export default function LoginPage() {
               id="email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full bg-gray-100 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-black"
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setEmailError(null);
+              }}
+              className={`w-full bg-gray-100 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 ${emailError ? "ring-2 ring-red-500" : "focus:ring-black"
+                }`}
               placeholder="your@email.com"
             />
+            {emailError && (
+              <p className="text-red-500 text-xs mt-1">{emailError}</p>
+            )}
           </div>
 
           <div>
@@ -73,17 +99,29 @@ export default function LoginPage() {
               id="password"
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full bg-gray-100 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-black"
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setPasswordError(null);
+              }}
+              className={`w-full bg-gray-100 rounded-lg px-4 py-3 text-sm outline-none focus:ring-2 ${passwordError ? "ring-2 ring-red-500" : "focus:ring-black"
+                }`}
               placeholder="••••••••"
             />
+            {passwordError && (
+              <p className="text-red-500 text-xs mt-1">{passwordError}</p>
+            )}
           </div>
+          <div className="text-right">
+            <Link href="/forgot-password" className="text-xs text-gray-500 hover:text-black underline">
+              Forgot password?
+            </Link>
+          </div>
+
 
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-black text-white rounded-full py-4 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-black text-white rounded-full py-4 text-sm font-medium cursor-pointer hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? "Logging in..." : "Login"}
           </button>

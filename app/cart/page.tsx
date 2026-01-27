@@ -1,7 +1,7 @@
 "use client";
 
 import CartSection from "@/components/cart/CartSection";
-import ShippingCalculator from "@/components/cart/ShippingCalculator";
+
 import ShippingInfoBanner from "@/components/cart/ShippinhInfoBanner";
 import BreadCrumbNav from "@/components/BreadCrumbNav";
 import { useCart } from "@/hooks/useCart";
@@ -47,7 +47,7 @@ export default function CartPage() {
           <p className="text-gray-500 mb-6">Add some items to get started</p>
           <Link
             href="/products"
-            className="bg-black text-white px-6 py-3 rounded-full"
+            className="bg-black text-white px-6 py-3 rounded-full cursor-pointer hover:bg-gray-800 transition-colors"
           >
             Continue Shopping
           </Link>
@@ -62,16 +62,16 @@ export default function CartPage() {
         <BreadCrumbNav />
       </div>
       {/* Cart Items + Order Summary */}
-      <CartSection 
-        items={items} 
-        summary={summary} 
+      <CartSection
+        items={items}
+        summary={summary}
         checkoutUrl={checkoutUrl}
         discountCodes={discountCodes}
         onCartUpdate={refresh}
       />
 
       {/* Shipping Calculator */}
-      <ShippingCalculator />
+
       <div>
         <div>
         </div>

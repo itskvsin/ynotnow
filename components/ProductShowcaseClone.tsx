@@ -9,25 +9,34 @@ import type { ShopifyProduct } from "@/types/shopify";
 type SortOption = "default" | "price-low" | "price-high" | "name-asc" | "name-desc";
 
 interface ProductShowcaseCloneProps {
-  gridCols?: "2" | "3";
+  gridCols?: "3" | "4";
   sortBy?: SortOption;
   searchQuery?: string;
+  products?: ShopifyProduct[]; // Accept pre-filtered products
 }
 
 export default function ProductShowcaseClone({
   gridCols = "3",
   sortBy = "default",
   searchQuery = "",
+  products: propProducts,
 }: ProductShowcaseCloneProps) {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // If products are provided as prop, use them instead of fetching
+    if (propProducts) {
+      setProducts(propProducts);
+      setLoading(false);
+      return;
+    }
+
     async function fetchProducts() {
       try {
         setLoading(true);
-        
+
         // Use search API if there's a search query
         if (searchQuery.trim()) {
           const response = await fetch(
@@ -88,9 +97,9 @@ export default function ProductShowcaseClone({
   }, [products, sortBy]);
 
   const gridClass =
-    gridCols === "2"
-      ? "grid grid-cols-2 place-items-center lg:grid-cols-2 gap-x-4 transition-all duration-300"
-      : "grid grid-cols-2 place-items-center lg:grid-cols-3 gap-x-4 transition-all duration-300";
+    gridCols === "3"
+      ? "grid grid-cols-1 sm:grid-cols-2 place-items-center lg:grid-cols-3 gap-x-4 transition-all duration-300"
+      : "grid grid-cols-2 sm:grid-cols-2 place-items-center lg:grid-cols-4 gap-x-4 transition-all duration-300";
 
   if (loading) {
     return (

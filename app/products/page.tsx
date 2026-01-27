@@ -1,192 +1,243 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { RiFilter3Fill } from "react-icons/ri";
-import { BsFillGridFill } from "react-icons/bs";
-import { TfiLayoutGrid3Alt } from "react-icons/tfi";
-import { IoClose } from "react-icons/io5";
-import { FiSearch } from "react-icons/fi";
+import { BsFillGrid3X3GapFill } from "react-icons/bs";
+import { MdGridView } from "react-icons/md";
 import ProductShowcaseClone from "@/components/ProductShowcaseClone";
+import FilterCloudBar from "@/components/products/FilterCloudBar";
+import FilterPanel, { FilterState } from "@/components/products/FilterPanel";
+import { getProductsAction } from "@/lib/actions/products";
+import type { ShopifyProduct } from "@/types/shopify";
 
 const Hero = () => {
   return (
     <div className="bg-[url('/images/collectionHoodie.png')] flex flex-col gap-4 py-6 px-6 items-start justify-end bg-center bg-cover h-80 w-full lg:h-[60vh] lg:bg-cover lg:bg-[35%_65%]">
-      {" "}
       <h1 className="text-3xl text-white font-bold font-Geist">Shop All</h1>
       <p className="text-white/50 font-Geist text-sm">
         Every drop. Every vibe. Find your next favorite look all in one place.
-      </p>{" "}
+      </p>
     </div>
   );
 };
 
 type SortOption = "default" | "price-low" | "price-high" | "name-asc" | "name-desc";
 
-const page = () => {
-  const [gridView, setGridView] = useState<"2" | "3">("3");
+export default function ProductsPage() {
+  const [gridView, setGridView] = useState<"3" | "4">("3");
   const [showFilter, setShowFilter] = useState(false);
-  const [sortBy, setSortBy] = useState<SortOption>("default");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [products, setProducts] = useState<ShopifyProduct[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleSort = (option: SortOption) => {
-    setSortBy(option);
-    setShowFilter(false);
-  };
+  const [filters, setFilters] = useState<FilterState>({
+    priceRange: [0, 10000],
+    categories: [],
+    tags: [],
+    vendors: [],
+    sortBy: "default",
+  });
+
+  // Fetch products on mount
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        setLoading(true);
+        const { products: fetchedProducts } = await getProductsAction(50);
+        setProducts(fetchedProducts);
+      } catch (err) {
+        console.error("Failed to fetch products:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProducts();
+  }, []);
+
+  // Extract unique categories, tags, vendors from products
+  const { availableCategories, availableTags, availableVendors } = useMemo(() => {
+    const categories = new Set<string>();
+    const tags = new Set<string>();
+    const vendors = new Set<string>();
+
+    products.forEach((product) => {
+      if (product.productType) categories.add(product.productType);
+      if (product.vendor) vendors.add(product.vendor);
+      product.tags?.forEach((tag) => tags.add(tag));
+    });
+
+    return {
+      availableCategories: Array.from(categories),
+      availableTags: Array.from(tags),
+      availableVendors: Array.from(vendors),
+    };
+  }, [products]);
+
+  // Filter and sort products
+  const filteredProducts = useMemo(() => {
+    let filtered = [...products];
+
+    // Apply price filter
+    filtered = filtered.filter((product) => {
+      const price = parseFloat(product.priceRange.minVariantPrice.amount);
+      return price >= filters.priceRange[0] && price <= filters.priceRange[1];
+    });
+
+    // Apply category filter
+    if (filters.categories.length > 0) {
+      filtered = filtered.filter((product) =>
+        filters.categories.includes(product.productType || "")
+      );
+    }
+
+    // Apply tags filter
+    if (filters.tags.length > 0) {
+      filtered = filtered.filter((product) =>
+        product.tags?.some((tag) => filters.tags.includes(tag))
+      );
+    }
+
+    // Apply vendor filter
+    if (filters.vendors.length > 0) {
+      filtered = filtered.filter((product) =>
+        filters.vendors.includes(product.vendor || "")
+      );
+    }
+
+    // Apply sorting
+    switch (filters.sortBy) {
+      case "price-low":
+        filtered.sort(
+          (a, b) =>
+            parseFloat(a.priceRange.minVariantPrice.amount) -
+            parseFloat(b.priceRange.minVariantPrice.amount)
+        );
+        break;
+      case "price-high":
+        filtered.sort(
+          (a, b) =>
+            parseFloat(b.priceRange.minVariantPrice.amount) -
+            parseFloat(a.priceRange.minVariantPrice.amount)
+        );
+        break;
+      case "name-asc":
+        filtered.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case "name-desc":
+        filtered.sort((a, b) => b.title.localeCompare(a.title));
+        break;
+    }
+
+    return filtered;
+  }, [products, filters]);
+
+  // Count active filters
+  const activeFiltersCount =
+    filters.categories.length +
+    filters.tags.length +
+    filters.vendors.length +
+    (filters.priceRange[1] < 10000 ? 1 : 0) +
+    (filters.sortBy !== "default" ? 1 : 0);
 
   return (
     <section>
       <div className="relative">
         <Hero />
       </div>
-      <div className="h-18 border-b w-full flex flex-col lg:flex-row justify-between px-4 lg:items-center lg:justify-between lg:gap-10 gap-4 py-4">
-        {/* Search Bar */}
-        <div className="flex-1 max-w-md">
-          <div className="relative">
-            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search products..."
-              className="w-full pl-10 pr-4 py-2 border rounded-full text-sm outline-none focus:ring-2 focus:ring-black"
-            />
-          </div>
-        </div>
 
-        <div className="flex items-center gap-4">
-          <div className="leftSection flex gap-4 items-center">
-            <button
-              onClick={() => setGridView("2")}
-              className={`p-2 transition-all duration-300 ${
-                gridView === "2" ? "text-black scale-110" : "text-black/50"
-              }`}
-              aria-label="2 column grid view"
-            >
-              <BsFillGridFill className="text-2xl" />
-            </button>
+      {/* Filter Bar and Grid Toggle - Inline */}
+      <div className="sticky top-0 z-40 bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+          {/* Filter Button */}
+          <button
+            onClick={() => setShowFilter(!showFilter)}
+            className="flex-1 flex items-center justify-center gap-3 bg-black hover:bg-gray-800 text-white rounded-full py-3 px-6 transition-all duration-300 group"
+          >
+            <span className="font-medium">Filter & Sort</span>
+            {activeFiltersCount > 0 && (
+              <span className="bg-white text-black text-xs px-2 py-1 rounded-full font-semibold">
+                {activeFiltersCount}
+              </span>
+            )}
+          </button>
+
+          {/* Grid View Toggle */}
+          <div className="flex gap-2">
             <button
               onClick={() => setGridView("3")}
-              className={`p-2 transition-all duration-300 ${
-                gridView === "3" ? "text-black scale-110" : "text-black/50"
-              }`}
+              className={`p-2 transition-all duration-300 ${gridView === "3" ? "text-black scale-110" : "text-black/50"
+                }`}
               aria-label="3 column grid view"
             >
-              <TfiLayoutGrid3Alt className="text-xl" />
+              <BsFillGrid3X3GapFill className="text-2xl" />
             </button>
-          </div>
-          <div className="rightSection flex items-center text-xl gap-2">
             <button
-              onClick={() => setShowFilter(!showFilter)}
-              className="flex items-center gap-2 hover:opacity-70 transition-opacity"
+              onClick={() => setGridView("4")}
+              className={`p-2 transition-all duration-300 ${gridView === "4" ? "text-black scale-110" : "text-black/50"
+                }`}
+              aria-label="4 column grid view"
             >
-              <RiFilter3Fill />
-              <p>Filter & Sort</p>
+              <MdGridView className="text-2xl" />
             </button>
           </div>
         </div>
       </div>
 
-      {/* Filter & Sort Modal */}
+      {/* Filter Panel */}
       <AnimatePresence>
         {showFilter && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/50 z-50 flex items-start justify-end"
-            onClick={() => setShowFilter(false)}
-          >
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="bg-white w-full max-w-md h-full shadow-xl overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-            <div className="p-6 border-b flex justify-between items-center">
-              <h2 className="text-xl font-bold">Filter & Sort</h2>
-              <button
-                onClick={() => setShowFilter(false)}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                aria-label="Close filter"
-              >
-                <IoClose className="text-2xl" />
-              </button>
-            </div>
-            <div className="p-6">
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold mb-4">Sort By</h3>
-                <div className="space-y-2">
-                  <button
-                    onClick={() => handleSort("default")}
-                    className={`w-full text-left px-4 py-2 rounded transition-colors ${
-                      sortBy === "default"
-                        ? "bg-black text-white"
-                        : "bg-gray-100 hover:bg-gray-200"
-                    }`}
-                  >
-                    Default
-                  </button>
-                  <button
-                    onClick={() => handleSort("price-low")}
-                    className={`w-full text-left px-4 py-2 rounded transition-colors ${
-                      sortBy === "price-low"
-                        ? "bg-black text-white"
-                        : "bg-gray-100 hover:bg-gray-200"
-                    }`}
-                  >
-                    Price: Low to High
-                  </button>
-                  <button
-                    onClick={() => handleSort("price-high")}
-                    className={`w-full text-left px-4 py-2 rounded transition-colors ${
-                      sortBy === "price-high"
-                        ? "bg-black text-white"
-                        : "bg-gray-100 hover:bg-gray-200"
-                    }`}
-                  >
-                    Price: High to Low
-                  </button>
-                  <button
-                    onClick={() => handleSort("name-asc")}
-                    className={`w-full text-left px-4 py-2 rounded transition-colors ${
-                      sortBy === "name-asc"
-                        ? "bg-black text-white"
-                        : "bg-gray-100 hover:bg-gray-200"
-                    }`}
-                  >
-                    Name: A to Z
-                  </button>
-                  <button
-                    onClick={() => handleSort("name-desc")}
-                    className={`w-full text-left px-4 py-2 rounded transition-colors ${
-                      sortBy === "name-desc"
-                        ? "bg-black text-white"
-                        : "bg-gray-100 hover:bg-gray-200"
-                    }`}
-                  >
-                    Name: Z to A
-                  </button>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
+          <FilterPanel
+            isOpen={showFilter}
+            onClose={() => setShowFilter(false)}
+            filters={filters}
+            onFiltersChange={setFilters}
+            availableCategories={availableCategories}
+            availableTags={availableTags}
+            availableVendors={availableVendors}
+          />
         )}
       </AnimatePresence>
 
+      {/* Spacer removed - grid starts immediately */}
+      <div className="w-full px-4">
+      </div>
+
+      {/* Products Grid */}
       <motion.div
-        key={gridView}
+        key={`${gridView}-${activeFiltersCount}`}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
-        <ProductShowcaseClone gridCols={gridView} sortBy={sortBy} searchQuery={searchQuery} />
+        {loading ? (
+          <div className="text-center py-20">
+            <p className="text-gray-600">Loading products...</p>
+          </div>
+        ) : filteredProducts.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-gray-600">No products match your filters</p>
+            <button
+              onClick={() =>
+                setFilters({
+                  priceRange: [0, 10000],
+                  categories: [],
+                  tags: [],
+                  vendors: [],
+                  sortBy: "default",
+                })
+              }
+              className="mt-4 bg-black text-white px-6 py-2 rounded-full text-sm cursor-pointer hover:bg-gray-800 transition-colors"
+            >
+              Clear Filters
+            </button>
+          </div>
+        ) : (
+          <ProductShowcaseClone
+            gridCols={gridView}
+            sortBy={filters.sortBy as SortOption}
+            products={filteredProducts}
+          />
+        )}
       </motion.div>
     </section>
   );
-};
-export default page;
+}

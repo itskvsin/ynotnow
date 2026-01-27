@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { CartItem, CartSummary } from "@/types/cart";
 import CartItemRow from "./CartItemRow";
 import OrderSummary from "./OrderSummary";
@@ -16,9 +17,9 @@ interface CartSectionProps {
   onCartUpdate?: () => void;
 }
 
-export default function CartSection({ 
-  items: initialItems, 
-  summary, 
+export default function CartSection({
+  items: initialItems,
+  summary,
   checkoutUrl,
   discountCodes = [],
   onCartUpdate
@@ -62,7 +63,7 @@ export default function CartSection({
       // Cart will refresh via event listener
     } catch (error) {
       console.error("Error updating quantity:", error);
-      alert("Failed to update quantity");
+      toast.error("Failed to update quantity");
     }
   };
 
@@ -74,7 +75,7 @@ export default function CartSection({
       // Cart will refresh via event listener
     } catch (error) {
       console.error("Error removing item:", error);
-      alert("Failed to remove item");
+      toast.error("Failed to remove item");
     }
   };
 
@@ -131,20 +132,20 @@ export default function CartSection({
         </div>
 
         {/* <div className="w-1/4"> */}
-          {/* Summary */}
-          <OrderSummary 
-            summary={summary} 
-            checkoutUrl={checkoutUrl}
-            discountCodes={discountCodes}
-            onDiscountCodeApplied={() => {
-              if (onCartUpdate) {
-                onCartUpdate();
-              } else {
-                // Fallback to event-based refresh
-                window.dispatchEvent(new Event("cart-updated"));
-              }
-            }}
-          />
+        {/* Summary */}
+        <OrderSummary
+          summary={summary}
+          checkoutUrl={checkoutUrl}
+          discountCodes={discountCodes}
+          onDiscountCodeApplied={() => {
+            if (onCartUpdate) {
+              onCartUpdate();
+            } else {
+              // Fallback to event-based refresh
+              window.dispatchEvent(new Event("cart-updated"));
+            }
+          }}
+        />
         {/* </div> */}
       </div>
     </section>

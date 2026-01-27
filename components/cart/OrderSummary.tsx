@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
+import { validatePromoCode } from "@/lib/utils/validation";
 import { CartSummary } from "@/types/cart";
 import { GoTag } from "react-icons/go";
 import { PiPackage } from "react-icons/pi";
@@ -12,11 +14,11 @@ interface OrderSummaryProps {
   onDiscountCodeApplied?: () => void;
 }
 
-export default function OrderSummary({ 
-  summary, 
+export default function OrderSummary({
+  summary,
   checkoutUrl,
   discountCodes = [],
-  onDiscountCodeApplied 
+  onDiscountCodeApplied
 }: OrderSummaryProps) {
   const [promoCode, setPromoCode] = useState("");
   const [isApplying, setIsApplying] = useState(false);
@@ -26,13 +28,15 @@ export default function OrderSummary({
     if (checkoutUrl) {
       window.location.href = checkoutUrl;
     } else {
-      alert("Checkout URL not available. Please try again.");
+      toast.error("Checkout URL not available. Please try again.");
     }
   };
 
   const handleApplyPromoCode = async () => {
-    if (!promoCode.trim()) {
-      setError("Please enter a promo code");
+    // Validate promo code
+    const validation = validatePromoCode(promoCode);
+    if (!validation.isValid) {
+      setError(validation.error || null);
       return;
     }
 
@@ -55,6 +59,7 @@ export default function OrderSummary({
       }
 
       setPromoCode("");
+      toast.success("Promo code applied successfully!");
       if (onDiscountCodeApplied) {
         onDiscountCodeApplied();
       }

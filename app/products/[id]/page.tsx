@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import { toast } from "sonner";
 import { useParams } from "next/navigation";
 import ProductDetailSection from "@/components/product/ProductDetailSection";
 import ProductMetaSection from "@/components/product/ProductMetaSection";
@@ -9,6 +10,7 @@ import ProductShowcaseClone from "@/components/ProductShowcaseClone";
 import BreadCrumbNav from "@/components/BreadCrumbNav";
 import ProductInfo from "@/components/product/ProductInfo";
 import { useAddToCart } from "@/hooks/useAddToCart";
+import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import type { ShopifyProduct } from "@/types/shopify";
 
 import { PiPackageLight } from "react-icons/pi";
@@ -70,7 +72,7 @@ function findVariantByOptions(
   color: string | null // This is a hex code from the UI
 ): string | null {
   if (!shopifyProduct) return null;
-  
+
   // Check if product has size and color options
   const hasSizeOption = shopifyProduct.variants.edges.some(edge =>
     edge.node.selectedOptions?.some(opt => opt.name.toLowerCase() === "size")
@@ -107,7 +109,7 @@ function findVariantByOptions(
         }
       });
     });
-    
+
     // Find the color name that maps to this hex code
     for (const colorName of allColorOptions) {
       if (colorNameToHex(colorName) === color) {
@@ -120,13 +122,13 @@ function findVariantByOptions(
   // Find variant matching size and optionally color
   const variant = shopifyProduct.variants.edges.find(({ node }) => {
     if (!node.availableForSale) return false;
-    
+
     const hasSize = node.selectedOptions?.some(
       (opt) => opt.name.toLowerCase() === "size" && opt.value === size
     );
-    
+
     if (!hasSize) return false;
-    
+
     // If color is selected, match it; otherwise any color is fine
     if (colorNameToMatch) {
       const hasColor = node.selectedOptions?.some(
@@ -134,7 +136,7 @@ function findVariantByOptions(
       );
       return hasColor;
     }
-    
+
     return true; // Size matches and no color requirement
   });
 
@@ -170,15 +172,15 @@ export default function Page() {
         setIsLoading(true);
         const { getProductByHandleAction } = await import("@/lib/actions/products");
         const { product, error } = await getProductByHandleAction(productHandle);
-        
+
         if (error) {
           console.error("Error fetching product:", error);
           return;
         }
-        
+
         if (product) {
           setShopifyProduct(product);
-          
+
           // Check if product has size and color options
           const hasSizeOption = product.variants.edges.some(edge =>
             edge.node.selectedOptions?.some(opt => opt.name.toLowerCase() === "size")
@@ -186,13 +188,13 @@ export default function Page() {
           const hasColorOption = product.variants.edges.some(edge =>
             edge.node.selectedOptions?.some(opt => opt.name.toLowerCase() === "color")
           );
-          
+
           // Only auto-select if options exist (for testing - in production all products have variants)
           if (hasSizeOption || hasColorOption) {
             const firstAvailableVariant = product.variants.edges.find(
               edge => edge.node.availableForSale
             ) || product.variants.edges[0];
-            
+
             if (firstAvailableVariant) {
               if (hasSizeOption) {
                 const firstSize = firstAvailableVariant.node.selectedOptions?.find(
@@ -202,7 +204,7 @@ export default function Page() {
                   setSelectedSize(firstSize);
                 }
               }
-              
+
               if (hasColorOption) {
                 const firstColor = firstAvailableVariant.node.selectedOptions?.find(
                   (opt) => opt.name.toLowerCase() === "color"
@@ -226,6 +228,32 @@ export default function Page() {
       fetchProduct();
     }
   }, [productHandle]);
+
+  // Track recently viewed
+  const { addProduct } = useRecentlyViewed();
+
+  useEffect(() => {
+    if (shopifyProduct && productHandle) {
+      const price = shopifyProduct.priceRange.minVariantPrice.amount;
+      const currencyCode = shopifyProduct.priceRange.minVariantPrice.currencyCode;
+      const currencySymbols: { [key: string]: string } = {
+        USD: "$",
+        EUR: "€",
+        GBP: "£",
+        INR: "₹",
+      };
+      const symbol = currencySymbols[currencyCode] || currencyCode;
+      const formattedPrice = `${symbol}${parseFloat(price).toFixed(2)}`;
+
+      addProduct({
+        id: shopifyProduct.id,
+        handle: productHandle,
+        title: shopifyProduct.title,
+        image: shopifyProduct.featuredImage?.url || "",
+        price: formattedPrice,
+      });
+    }
+  }, [shopifyProduct, productHandle, addProduct]);
 
   const product = useMemo(
     () => shopifyProductToProduct(shopifyProduct),
@@ -268,18 +296,18 @@ export default function Page() {
   // Calculate stock from variants
   const stockData = useMemo(() => {
     if (!shopifyProduct) return { total: 0, remaining: 0 };
-    
+
     const variants = shopifyProduct.variants.edges.map(edge => edge.node);
     const totalStock = variants.reduce((sum, variant) => {
       return sum + (variant.quantityAvailable || 0);
     }, 0);
-    
+
     const availableStock = variants
       .filter(v => v.availableForSale)
       .reduce((sum, variant) => {
         return sum + (variant.quantityAvailable || 0);
       }, 0);
-    
+
     return {
       total: totalStock || variants.length * 10, // Fallback estimate if quantity not available
       remaining: availableStock || variants.filter(v => v.availableForSale).length * 10,
@@ -296,20 +324,20 @@ export default function Page() {
   // Parse description HTML for accordion content
   const parseDescriptionForAccordion = (descriptionHtml?: string) => {
     if (!descriptionHtml) return null;
-    
+
     // Try to extract sections from HTML
     // This is a simple parser - you might want to enhance this based on your HTML structure
     const sections: { [key: string]: string } = {};
-    
+
     // Look for common section patterns (using [\s\S] instead of . with s flag)
     const featuresMatch = descriptionHtml.match(/<h[23][^>]*>[\s\S]*?features?[\s\S]*?<\/h[23]>([\s\S]*?)(?=<h[23]|$)/i);
     const careMatch = descriptionHtml.match(/<h[23][^>]*>[\s\S]*?(care|composition)[\s\S]*?<\/h[23]>([\s\S]*?)(?=<h[23]|$)/i);
     const deliveryMatch = descriptionHtml.match(/<h[23][^>]*>[\s\S]*?(delivery|shipping)[\s\S]*?<\/h[23]>([\s\S]*?)(?=<h[23]|$)/i);
-    
+
     if (featuresMatch && featuresMatch[1]) sections.features = featuresMatch[1].replace(/<[^>]+>/g, "").trim();
     if (careMatch && careMatch[2]) sections.care = careMatch[2].replace(/<[^>]+>/g, "").trim();
     if (deliveryMatch && deliveryMatch[2]) sections.delivery = deliveryMatch[2].replace(/<[^>]+>/g, "").trim();
-    
+
     return sections;
   };
 
@@ -327,7 +355,7 @@ export default function Page() {
         hasSizeOption,
         hasColorOption,
       });
-      alert("Please select a size to add to cart");
+      toast.error("Please select a size to add to cart");
       return;
     }
 
@@ -336,11 +364,11 @@ export default function Page() {
     try {
       await addItem(selectedVariantId, quantity);
       // Show success message (you can replace with a toast notification)
-      alert("Item added to cart!");
+      toast.success("Item added to cart!");
     } catch (error) {
       console.error("Error adding to cart:", error);
       const errorMessage = addToCartError || (error instanceof Error ? error.message : "Failed to add item to cart");
-      alert(errorMessage);
+      toast.error(errorMessage);
     }
   };
 
@@ -351,7 +379,7 @@ export default function Page() {
         selectedColor,
         shopifyProduct: !!shopifyProduct,
       });
-      alert("Please select a size to buy now");
+      toast.error("Please select a size to buy now");
       return;
     }
 
@@ -366,7 +394,7 @@ export default function Page() {
     } catch (error) {
       console.error("Error adding to cart:", error);
       const errorMessage = addToCartError || (error instanceof Error ? error.message : "Failed to add item to cart");
-      alert(errorMessage);
+      toast.error(errorMessage);
     }
   };
 
@@ -408,15 +436,15 @@ export default function Page() {
           />
           <div>
             <div className="hidden sm:block">
-            <ProductInfo
-              product={product}
-              selectedSize={selectedSize}
-              selectedColor={selectedColor}
-              onSizeChange={setSelectedSize}
-              onColorChange={setSelectedColor}
-              hasSizeOption={hasSizeOption}
-              hasColorOption={hasColorOption}
-            />
+              <ProductInfo
+                product={product}
+                selectedSize={selectedSize}
+                selectedColor={selectedColor}
+                onSizeChange={setSelectedSize}
+                onColorChange={setSelectedColor}
+                hasSizeOption={hasSizeOption}
+                hasColorOption={hasColorOption}
+              />
             </div>
             {/* RIGHT — Product Meta */}
             <ProductMetaSection

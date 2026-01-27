@@ -7,6 +7,7 @@ import {
   getCustomer,
   updateCustomer,
   getCustomerOrders,
+  recoverCustomer,
 } from "@/lib/shopify-customer";
 
 const CUSTOMER_TOKEN_COOKIE = "shopify_customer_token";
@@ -26,7 +27,7 @@ async function getCustomerTokenFromCookies(): Promise<string | null> {
 async function setCustomerTokenInCookies(token: string, expiresAt: string): Promise<void> {
   const cookieStore = await cookies();
   const expiryDate = new Date(expiresAt);
-  
+
   cookieStore.set(CUSTOMER_TOKEN_COOKIE, token, {
     expires: expiryDate,
     path: "/",
@@ -55,15 +56,15 @@ export async function registerCustomerAction(input: {
 }) {
   try {
     const customer = await createCustomer(input);
-    
+
     // Auto-login after registration
     const { accessToken, expiresAt } = await createCustomerAccessToken(
       input.email,
       input.password
     );
-    
+
     await setCustomerTokenInCookies(accessToken, expiresAt);
-    
+
     return { customer, error: null };
   } catch (error) {
     console.error("Error registering customer:", error);
@@ -81,9 +82,9 @@ export async function loginCustomerAction(email: string, password: string) {
   try {
     const { accessToken, expiresAt } = await createCustomerAccessToken(email, password);
     await setCustomerTokenInCookies(accessToken, expiresAt);
-    
+
     const customer = await getCustomer(accessToken);
-    
+
     return { customer, error: null };
   } catch (error) {
     console.error("Error logging in:", error);
@@ -113,11 +114,11 @@ export async function logoutCustomerAction() {
 export async function getCurrentCustomerAction() {
   try {
     const token = await getCustomerTokenFromCookies();
-    
+
     if (!token) {
       return { customer: null, error: null };
     }
-    
+
     const customer = await getCustomer(token);
     return { customer, error: null };
   } catch (error) {
@@ -138,11 +139,11 @@ export async function updateCustomerProfileAction(customer: {
 }) {
   try {
     const token = await getCustomerTokenFromCookies();
-    
+
     if (!token) {
       return { customer: null, error: "Not authenticated" };
     }
-    
+
     const updatedCustomer = await updateCustomer(token, customer);
     return { customer: updatedCustomer, error: null };
   } catch (error) {
@@ -160,11 +161,11 @@ export async function updateCustomerProfileAction(customer: {
 export async function getCustomerOrdersAction(first: number = 10) {
   try {
     const token = await getCustomerTokenFromCookies();
-    
+
     if (!token) {
       return { orders: [], error: "Not authenticated" };
     }
-    
+
     const orders = await getCustomerOrders(token, first);
     return { orders, error: null };
   } catch (error) {
@@ -175,4 +176,21 @@ export async function getCustomerOrdersAction(first: number = 10) {
     };
   }
 }
+
+/**
+ * Server Action: Recover customer password
+ */
+export async function recoverCustomerPasswordAction(email: string) {
+  try {
+    await recoverCustomer(email);
+    return { success: true, error: null };
+  } catch (error) {
+    console.error("Error sending recovery email:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to send recovery email",
+    };
+  }
+}
+
 
