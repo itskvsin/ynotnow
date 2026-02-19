@@ -7,6 +7,7 @@ import Hero from "@/components/Hero";
 import Navbar from "@/components/layout/Navbar";
 import Slider  from "@/components/Slider";
 import ReactLenis from "lenis/react";
+import BentoGrid from "@/components/ui/BentoGrid";
 
 export default function Demo() {
   return (
@@ -20,6 +21,7 @@ export default function Demo() {
         <ProductShowcase />
         <Moment />
         <Slider />
+        <BentoGrid />
       </Reveal>
     </ReactLenis>
   );
