@@ -25,6 +25,9 @@ const geistMono = Geist_Mono({
 //   subsets: ["latin"],
 // })
 
+import PageTransition from "@/components/PageTransition";
+import SmoothScrolling from "@/components/SmoothScrolling";
+
 export const metadata: Metadata = {
   title: "YNOTNOW",
   description: "YNOTNOW was born from the idea that there's never a perfect time but only now",
@@ -41,13 +44,17 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <CommerceProviderWrapper>
-          <Navbar />
-          {children}
-          <FeaturesGrid />
-          <About />
-          <LastBg />
-          <Footer />
-          <Toaster />
+          <SmoothScrolling>
+            <Navbar />
+            <PageTransition>
+              {children}
+            </PageTransition>
+            <FeaturesGrid />
+            <About />
+            <LastBg />
+            <Footer />
+            <Toaster />
+          </SmoothScrolling>
         </CommerceProviderWrapper>
       </body>
     </html>

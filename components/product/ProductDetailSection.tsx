@@ -23,7 +23,7 @@ export default function ProductDetailSection({
 }: ProductDetailSectionProps) {
   return (
     <section className="py-6 max-w-lg mx-auto lg:flex">
-      <ProductGallery images={product.images} />
+      <ProductGallery images={product.images} productId={product.id} />
       <div className="md:hidden block">
         <ProductInfo
           product={product}

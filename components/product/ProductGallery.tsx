@@ -1,14 +1,16 @@
 "use client";
 
+import { motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import { ProductImage } from "@/types/product";
 
 interface ProductGalleryProps {
   images: ProductImage[];
+  productId: string;
 }
 
-export default function ProductGallery({ images }: ProductGalleryProps) {
+export default function ProductGallery({ images, productId }: ProductGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeImage = images[activeIndex];
 
@@ -18,14 +20,22 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
       <div className="lg:hidden">
         {/* Main Image */}
         <div className="flex justify-center items-center w-screen h-105">
-          <Image
-            src={activeImage.url}
-            alt={activeImage.alt || "Product image"}
-            width={600}
-            height={600}
-            className="object-contain w-full h-full"
-            draggable={false}
-          />
+          <motion.div
+            layoutId={`product-image-${productId}`}
+            className="w-full h-full relative"
+            transition={{
+              layout: { type: "spring", stiffness: 300, damping: 35, mass: 1 }, // Smoother settling
+            }}
+          >
+            <Image
+              src={activeImage.url}
+              alt={activeImage.alt || "Product image"}
+              width={600}
+              height={600}
+              className="object-contain w-full h-full"
+              draggable={false}
+            />
+          </motion.div>
         </div>
 
         {/* Dots */}
@@ -33,9 +43,8 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
           {images.map((_, i) => (
             <span
               key={i}
-              className={`h-1.5 w-1.5 rounded-full ${
-                activeIndex === i ? "bg-black" : "bg-gray-300"
-              }`}
+              className={`h-1.5 w-1.5 rounded-full ${activeIndex === i ? "bg-black" : "bg-gray-300"
+                }`}
             />
           ))}
         </div>
@@ -46,9 +55,8 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
             <button
               key={img.id}
               onClick={() => setActiveIndex(i)}
-              className={`shrink-0 rounded-xl border ${
-                activeIndex === i ? "border-black" : "border-gray-300"
-              }`}
+              className={`shrink-0 rounded-xl border ${activeIndex === i ? "border-black" : "border-gray-300"
+                }`}
             >
               <Image
                 src={img.url}
@@ -65,7 +73,13 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
       {/* ================= DESKTOP ================= */}
       <div className="hidden lg:grid grid-cols-[1.2fr_1fr] gap-6">
         {/* BIG IMAGE */}
-        <div className="rounded-2xl w-[18vw] h-[70vh] overflow-hidden bg-gray-100">
+        <motion.div
+          layoutId={`product-image-${productId}`}
+          transition={{
+            layout: { type: "spring", stiffness: 300, damping: 35, mass: 1 }, // Smoother settling
+          }}
+          className="rounded-2xl w-[18vw] h-[70vh] overflow-hidden bg-gray-100 relative"
+        >
           <Image
             src={activeImage.url}
             alt={activeImage.alt || "Product image"}
@@ -74,7 +88,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
             className="object-cover w-full h-full"
             draggable={false}
           />
-        </div>
+        </motion.div>
 
         {/* GRID IMAGES */}
         <div className="grid grid-cols-2 grid-rows-3 gap-4">
@@ -98,6 +112,6 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
           <div className="col-span-2 rounded-2xl bg-[#d6c5b8]" />
         </div>
       </div>
-    </section>
+    </section >
   );
 }

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { getProductsAction } from "@/lib/actions/products";
 import type { ShopifyProduct } from "@/types/shopify";
 
@@ -91,16 +92,22 @@ export default function RelatedProducts({
                             key={product.id}
                             href={`/products/${product.handle}`}
                             className="group"
+                            scroll={false}
                         >
-                            <div>
+                            <div className="overflow-hidden rounded-lg">
                                 {product.featuredImage?.url ? (
-                                    <Image
-                                        src={product.featuredImage.url}
-                                        alt={product.title}
-                                        width={300}
-                                        height={400}
-                                        className="w-full h-60 object-cover rounded-lg group-hover:opacity-90 transition-opacity"
-                                    />
+                                    <motion.div
+                                        layoutId={`product-image-${product.id}`}
+                                        className="w-full h-60"
+                                    >
+                                        <Image
+                                            src={product.featuredImage.url}
+                                            alt={product.title}
+                                            width={300}
+                                            height={400}
+                                            className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
+                                        />
+                                    </motion.div>
                                 ) : (
                                     <div className="w-full h-60 bg-gray-200 rounded-lg" />
                                 )}

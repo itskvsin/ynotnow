@@ -127,6 +127,7 @@ export const CUSTOMER_ORDERS_QUERY = `
                       altText
                     }
                     product {
+                      id
                       handle
                     }
                   }
@@ -191,6 +192,7 @@ export interface CustomerOrder {
             altText: string | null;
           } | null;
           product: {
+            id: string;
             handle: string;
           };
         } | null;

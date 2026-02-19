@@ -37,17 +37,7 @@ export function useCart(): UseCartReturn {
 
       setCart(cartData);
       setCheckoutUrl(cartData?.checkoutUrl || null);
-
-      // Get cart ID from cookie
-      if (typeof document !== "undefined") {
-        const cookies = document.cookie.split(";");
-        const cartCookie = cookies.find((cookie) =>
-          cookie.trim().startsWith("shopify_cart_id=")
-        );
-        if (cartCookie) {
-          setCartId(cartCookie.split("=")[1] || null);
-        }
-      }
+      setCartId(cartData?.id || null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load cart");
       setCart(null);

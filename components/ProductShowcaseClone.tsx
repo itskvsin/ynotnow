@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState, useEffect, useMemo } from "react";
 import { getProductsAction } from "@/lib/actions/products";
 import type { ShopifyProduct } from "@/types/shopify";
+import ProductCard from "@/components/product/ProductCard";
 
 type SortOption = "default" | "price-low" | "price-high" | "name-asc" | "name-desc";
 
@@ -153,49 +154,4 @@ export default function ProductShowcaseClone({
   );
 }
 
-/* ---------------- CARD ---------------- */
 
-function ProductCard({ product }: { product: ShopifyProduct }) {
-  const imageUrl = product.featuredImage?.url;
-  const price = product.priceRange.minVariantPrice.amount;
-  const currencyCode = product.priceRange.minVariantPrice.currencyCode;
-
-  // Format price with currency symbol
-  const formatPrice = (amount: string, currency: string) => {
-    const numAmount = parseFloat(amount);
-    const currencySymbols: { [key: string]: string } = {
-      USD: "$",
-      EUR: "€",
-      GBP: "£",
-      INR: "₹",
-    };
-    const symbol = currencySymbols[currency] || currency;
-    return `${symbol}${numAmount.toFixed(2)}`;
-  };
-
-  return (
-    <Link href={`/products/${product.handle}`} className="block">
-      <div>
-        {imageUrl ? (
-          <Image
-            src={imageUrl}
-            alt={product.title || "Product image"}
-            width={500}
-            height={600}
-            className="w-full h-60 lg:h-96 object-cover rounded-lg"
-          />
-        ) : (
-          <div className="w-full h-60 lg:h-96 bg-gray-200 rounded-lg flex items-center justify-center">
-            <p className="text-gray-400 text-sm">No image</p>
-          </div>
-        )}
-
-        <h3 className="text-sm mt-2">{product.title}</h3>
-
-        <div className="text-sm font-medium mt-1">
-          {formatPrice(price, currencyCode)}
-        </div>
-      </div>
-    </Link>
-  );
-}

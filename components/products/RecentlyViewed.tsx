@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import { IoTimeOutline } from "react-icons/io5";
+import { motion } from "framer-motion";
 
 export default function RecentlyViewed() {
     const { products } = useRecentlyViewed();
@@ -27,16 +28,22 @@ export default function RecentlyViewed() {
                                 key={product.id}
                                 href={`/products/${product.handle}`}
                                 className="block w-48 flex-shrink-0"
+                                scroll={false}
                             >
                                 <div className="group">
                                     {product.image ? (
-                                        <Image
-                                            src={product.image}
-                                            alt={product.title}
-                                            width={200}
-                                            height={250}
-                                            className="w-full h-60 object-cover rounded-lg group-hover:opacity-90 transition-opacity"
-                                        />
+                                        <motion.div
+                                            layoutId={`product-image-${product.id}`}
+                                            className="w-full h-60 rounded-lg overflow-hidden"
+                                        >
+                                            <Image
+                                                src={product.image}
+                                                alt={product.title}
+                                                width={200}
+                                                height={250}
+                                                className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
+                                            />
+                                        </motion.div>
                                     ) : (
                                         <div className="w-full h-60 bg-gray-200 rounded-lg flex items-center justify-center">
                                             <p className="text-gray-400 text-sm">No image</p>

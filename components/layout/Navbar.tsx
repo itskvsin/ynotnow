@@ -53,8 +53,8 @@ export default function Navbar() {
         <Link href="/">
           <Image
             src={"/images/ynotnowLogo.png"}
-            width={64}
-            height={64}
+            width={128}
+            height={128}
             alt="logo"
             className="w-28 lg:w-32"
           />
@@ -89,17 +89,19 @@ export default function Navbar() {
         </Link>
 
         {/* MENU ICON */}
-        <div
+        <button
+          type="button"
           onMouseEnter={() => isDesktop && setOpen(true)}
           onClick={() => !isDesktop && setOpen(!open)}
           className="cursor-pointer"
+          aria-label={open ? "Close menu" : "Open menu"}
         >
           {open ? (
             <IoClose className="text-white text-3xl transition-all duration-300" />
           ) : (
             <FiMenu className="text-white text-3xl transition-all duration-300" />
           )}
-        </div>
+        </button>
 
         {/* MENU DROPDOWN */}
         <motion.div

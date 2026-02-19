@@ -33,7 +33,7 @@ async function setCartIdInCookies(cartId: string): Promise<void> {
     expires: expiryDate,
     path: "/",
     sameSite: "lax",
-    httpOnly: false, // Allow client-side access
+    httpOnly: true, // Secure cookie, server-only access
   });
 }
 

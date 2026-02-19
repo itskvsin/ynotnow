@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { Product } from "@/types/product";
 import SizeSelector from "./SizeSelector";
@@ -48,7 +49,12 @@ export default function ProductInfo({
 
   return (
     <div className="mt-4">
-      <h1 className="text-2xl lg:text-4xl">{product.title}</h1>
+      <motion.h1
+        layoutId={`product-title-${product.id}`}
+        className="text-2xl lg:text-4xl"
+      >
+        {product.title}
+      </motion.h1>
 
       <p className="text-sm lg:text-md text-gray-400 mt-1">{product.description}</p>
 

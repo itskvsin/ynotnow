@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { IoArrowBack } from "react-icons/io5";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdContentCopy } from "react-icons/md";
+import { motion } from "framer-motion";
 
 interface OrderDetailsViewProps {
     order: any;
@@ -151,19 +152,25 @@ export default function OrderDetailsView({ order }: OrderDetailsViewProps) {
                             return (
                                 <div key={index} className="flex gap-4 pb-4 border-b last:border-b-0">
                                     {item.variant?.image?.url ? (
-                                        <Image
-                                            src={item.variant.image.url}
-                                            alt={item.title}
-                                            width={80}
-                                            height={80}
-                                            className="rounded-lg object-cover"
-                                        />
+                                        <motion.div
+                                            layoutId={`product-image-${item.variant.product.id}`}
+                                            className="w-20 h-20 rounded-lg overflow-hidden shrink-0"
+                                        >
+                                            <Image
+                                                src={item.variant.image.url}
+                                                alt={item.title}
+                                                width={80}
+                                                height={80}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </motion.div>
                                     ) : (
-                                        <div className="w-20 h-20 bg-gray-200 rounded-lg" />
+                                        <div className="w-20 h-20 bg-gray-200 rounded-lg shrink-0" />
                                     )}
 
                                     <div className="flex-1">
                                         <Link
+                                            scroll={false}
                                             href={`/products/${item.variant?.product?.handle || "#"}`}
                                             className="font-medium hover:underline"
                                         >

@@ -1,20 +1,14 @@
 "use client";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 
 export default function Hero() {
-  const [loaded, setLoaded] = useState(false);
-
   // Scroll progress from top of page to bottom
   const { scrollY } = useScroll();
 
   // Parallax value: adjust numbers for stronger/weaker movement
   const y = useTransform(scrollY, [0, 600], [0, 200]);
-
-  useEffect(() => {
-    setLoaded(true);
-  }, []);
 
   return (
     <section className="relative min-h-screen w-full overflow-hidden flex items-center justify-center">

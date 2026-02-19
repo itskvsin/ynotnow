@@ -120,18 +120,20 @@ function ProductCard({ product }: { product: ShopifyProduct }) {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      <Link href={`/products/${product.handle}`} className="w-full h-full">
+      <Link href={`/products/${product.handle}`} className="w-full h-full" scroll={false}>
         <div className="relative w-full h-full overflow-hidden">
           {imageUrl ? (
-            <>
+            <motion.div
+              layoutId={`product-image-${product.id}`}
+              className="w-full h-full relative"
+            >
               <Image
                 src={imageUrl}
                 alt={product.title}
                 fill
                 sizes="(max-width: 640px) 80vw, (max-width: 1024px) 50vw, 25vw"
-                className={`object-cover transition-opacity duration-300 ${
-                  hover ? "opacity-0" : "opacity-100"
-                }`}
+                className={`object-cover transition-opacity duration-300 ${hover ? "opacity-0" : "opacity-100"
+                  }`}
               />
 
               {secondImageUrl && (
@@ -140,12 +142,11 @@ function ProductCard({ product }: { product: ShopifyProduct }) {
                   alt={product.title}
                   fill
                   sizes="(max-width: 640px) 80vw, (max-width: 1024px) 50vw, 25vw"
-                  className={`absolute top-0 left-0 object-cover transition-opacity duration-300 ${
-                    hover ? "opacity-100" : "opacity-0"
-                  }`}
+                  className={`absolute top-0 left-0 object-cover transition-opacity duration-300 ${hover ? "opacity-100" : "opacity-0"
+                    }`}
                 />
               )}
-            </>
+            </motion.div>
           ) : (
             <div className="w-full h-full bg-gray-200 flex items-center justify-center">
               <p className="text-gray-400">No image available</p>
